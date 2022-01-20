@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+double defaultMargin = 24.w;
 Color primaryColor = Color(0xff3F75C5);
 Color alertColor = Color(0xffEB1F2B);
 Color secondaryTextColor = Color(0xff82868B);
