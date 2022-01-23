@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myintern/pages/home/main_page.dart';
 import 'package:myintern/pages/signin_page.dart';
 import 'package:myintern/pages/signup_page.dart';
 import 'package:myintern/pages/splash.dart';
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => SplashPage(),
           '/signin': (context) => SignInPage(),
-          '/signup': (context) => SignUpPage()
+          '/signup': (context) => SignUpPage(),
+          '/home': (context) => MainPage(),
         },
         theme: ThemeData(
           primarySwatch: Colors.blue,

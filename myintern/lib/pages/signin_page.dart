@@ -149,7 +149,9 @@ class _SignInPageState extends State<SignInPage> {
           child: RaisedButton(
             color: primaryColor,
             elevation: 0,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/home');
+            },
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             textColor: Colors.white,

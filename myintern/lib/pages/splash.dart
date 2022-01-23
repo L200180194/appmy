@@ -13,7 +13,8 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    Timer(Duration(seconds: 1), () => Navigator.pushNamed(context, '/signin'));
+    Timer(Duration(seconds: 1),
+        () => Navigator.popAndPushNamed(context, '/signin'));
     super.initState();
   }
 

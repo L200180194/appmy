@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myintern/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:colorful_safe_area/colorful_safe_area.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -269,7 +270,9 @@ class _SignUpPageState extends State<SignUpPage> {
           child: RaisedButton(
             color: primaryColor,
             elevation: 0,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/home');
+            },
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             textColor: Colors.white,
@@ -307,7 +310,8 @@ class _SignUpPageState extends State<SignUpPage> {
     }
 
     return Scaffold(
-        body: SafeArea(
+        body: ColorfulSafeArea(
+            color: primaryColor,
             child: (MediaQuery.of(context).orientation == Orientation.portrait)
                 ? ListView(
                     children: [
