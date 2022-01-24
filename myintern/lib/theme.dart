@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 double defaultMargin = 24.w;
 Color primaryColor = Color(0xff3F75C5);
+// Color blueclipColor = Color(0xff9FBAE2);
+Color blueclipColor = Color(0xffCFDCF0);
 Color alertColor = Color(0xffEB1F2B);
 Color secondaryTextColor = Color(0xff82868B);
 Color primaryTextColor = Color(0xff050D18);

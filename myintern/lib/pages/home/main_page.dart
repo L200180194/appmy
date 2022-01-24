@@ -133,11 +133,21 @@ class _MainPageState extends State<MainPage> {
               )),
               leading: SizedBox(),
               title: Center(
-                child: Text(
-                  'MyIntern',
-                  style: primaryTextStyle.copyWith(
-                      color: Colors.white, fontWeight: bold, fontSize: 35.sp),
-                ),
+                child: (curIndex == 2)
+                    ? Text(
+                        'Profile',
+                        style: primaryTextStyle.copyWith(
+                            color: Colors.white,
+                            fontWeight: bold,
+                            fontSize: 35.sp),
+                      )
+                    : Text(
+                        'MyIntern',
+                        style: primaryTextStyle.copyWith(
+                            color: Colors.white,
+                            fontWeight: bold,
+                            fontSize: 35.sp),
+                      ),
               ),
               actions: [
                 Container(
@@ -151,7 +161,7 @@ class _MainPageState extends State<MainPage> {
               ],
               backgroundColor: primaryColor,
             ),
-            body: SafeArea(child: Text('Main Page')),
+            body: bdy(),
           );
   }
 }
