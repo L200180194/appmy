@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myintern/pages/home/daftar_magang.dart';
+import 'package:myintern/pages/home/detail_page.dart';
 import 'package:myintern/pages/home/main_page.dart';
 import 'package:myintern/pages/signin_page.dart';
 import 'package:myintern/pages/signup_page.dart';
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
           '/signin': (context) => SignInPage(),
           '/signup': (context) => SignUpPage(),
           '/home': (context) => MainPage(),
+          '/daftar': (context) => DaftarMagang(),
+          '/detail': (context) => DetailPage(),
         },
         theme: ThemeData(
           primarySwatch: Colors.blue,

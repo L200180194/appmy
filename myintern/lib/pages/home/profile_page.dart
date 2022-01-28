@@ -333,7 +333,7 @@ class ProfilePage extends StatelessWidget {
       );
     }
 
-    Widget btnlogin(
+    Widget btnEdit(
       double containerh,
       double margintop,
       double marginbtm,
@@ -347,7 +347,7 @@ class ProfilePage extends StatelessWidget {
             color: primaryColor,
             elevation: 0,
             onPressed: () {
-              // Navigator.pushNamed(context, '/home');
+              Navigator.pushNamed(context, '/daftar');
             },
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -393,7 +393,7 @@ class ProfilePage extends StatelessWidget {
         abtme(),
         PendTer(),
         Akun(),
-        btnlogin(38.h, 21.h, 16.sp, 18.sp),
+        btnEdit(38.h, 21.h, 16.sp, 18.sp),
         btnKeluar(38.h, 0, 16.sp, 18.sp),
       ],
     );

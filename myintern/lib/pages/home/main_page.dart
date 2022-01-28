@@ -95,11 +95,13 @@ class _MainPageState extends State<MainPage> {
             bottomNavigationBar: btmnav(),
             appBar: AppBar(
               toolbarHeight: 48.h,
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(5),
-              )),
+              elevation: (curIndex == 2) ? 0 : 5,
+              shape: (curIndex == 2)
+                  ? RoundedRectangleBorder()
+                  : RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(5),
+                    )),
               leading: SizedBox(),
               title: Center(
                 child: Text(
