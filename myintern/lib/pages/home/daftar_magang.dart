@@ -2,9 +2,58 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:myintern/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:file_picker/file_picker.dart';
 
-class DaftarMagang extends StatelessWidget {
+class DaftarMagang extends StatefulWidget {
   const DaftarMagang({Key? key}) : super(key: key);
+
+  @override
+  _DaftarMagangState createState() => _DaftarMagangState();
+}
+
+class _DaftarMagangState extends State<DaftarMagang> {
+  dynamic _filecv;
+  dynamic _filesk;
+  dynamic _filespl;
+
+  void _pickFileCV() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx']);
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      setState(() {
+        _filecv = file.name;
+      });
+    }
+  }
+
+  void _pickFilesk() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx']);
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      setState(() {
+        _filesk = file.name;
+      });
+    }
+  }
+
+  void _pickFilespl() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx']);
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      setState(() {
+        _filespl = file.name;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,6 +219,94 @@ class DaftarMagang extends StatelessWidget {
       );
     }
 
+    Widget title(double fs, margintop, String text) {
+      return Container(
+        margin: EdgeInsets.fromLTRB(defaultMargin, margintop, defaultMargin, 0),
+        child: Text(
+          text,
+          style: primaryTextStyle.copyWith(fontWeight: semibold, fontSize: fs),
+        ),
+      );
+    }
+
+    Widget upCv(
+      double containerh,
+      double margintop,
+      double txt,
+    ) {
+      return Container(
+          height: containerh,
+          margin:
+              EdgeInsets.fromLTRB(defaultMargin, margintop, defaultMargin, 0),
+          child: RaisedButton(
+            color: Colors.white,
+            elevation: 0,
+            onPressed: () {
+              _pickFileCV();
+            },
+            shape: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+            // RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            textColor: Colors.black,
+            child: Text(
+              _filecv == null ? 'Upload CV' : _filecv,
+              style: primaryTextStyle.copyWith(
+                  color: Colors.black54, fontSize: txt),
+            ),
+          ));
+    }
+
+    Widget upSk(
+      double containerh,
+      double margintop,
+      double txt,
+    ) {
+      return Container(
+          height: containerh,
+          margin:
+              EdgeInsets.fromLTRB(defaultMargin, margintop, defaultMargin, 0),
+          child: RaisedButton(
+            color: Colors.white,
+            elevation: 0,
+            onPressed: () {
+              _pickFilesk();
+            },
+            shape: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+            // RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            textColor: Colors.black,
+            child: Text(
+              _filesk == null ? 'Upload Surat Keterangan' : _filecv,
+              style: primaryTextStyle.copyWith(
+                  color: Colors.black54, fontSize: txt),
+            ),
+          ));
+    }
+
+    Widget upspl(
+      double containerh,
+      double margintop,
+      double txt,
+    ) {
+      return Container(
+          height: containerh,
+          margin:
+              EdgeInsets.fromLTRB(defaultMargin, margintop, defaultMargin, 0),
+          child: RaisedButton(
+            color: Colors.white,
+            elevation: 0,
+            onPressed: () {
+              _pickFilespl();
+            },
+            shape: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+            // RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            textColor: Colors.black,
+            child: Text(
+              _filespl == null ? 'Upload Surat Persyaratan Lainya' : _filecv,
+              style: primaryTextStyle.copyWith(
+                  color: Colors.black54, fontSize: txt),
+            ),
+          ));
+    }
+
     Widget btndaftar(
       double containerh,
       double margintop,
@@ -206,10 +343,13 @@ class DaftarMagang extends StatelessWidget {
                     nameInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
                     alamatInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
                     tlpInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                    tlpInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                    tlpInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                    tlpInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                    btndaftar(38.h, 21.h, 18.sp),
+                    title(18.sp, 15.h, 'Upload CV'),
+                    upCv(38.h, 0, 14.sp),
+                    title(18.sp, 15.h, 'Upload Surat Keterangan'),
+                    upSk(38.h, 0, 14.sp),
+                    title(18.sp, 15.h, 'Upload Surat Persyaratan Lainya'),
+                    upspl(38.h, 0, 14.sp),
+                    btndaftar(38, 21, 18),
                   ],
                 )
               : ListView(

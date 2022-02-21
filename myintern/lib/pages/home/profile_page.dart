@@ -387,15 +387,36 @@ class ProfilePage extends StatelessWidget {
           ));
     }
 
-    return ListView(
-      children: [
-        header(),
-        abtme(),
-        PendTer(),
-        Akun(),
-        btnEdit(38.h, 21.h, 16.sp, 18.sp),
-        btnKeluar(38.h, 0, 16.sp, 18.sp),
-      ],
-    );
+    return (MediaQuery.of(context).orientation == Orientation.portrait)
+        ? ListView(
+            children: [
+              header(),
+              abtme(),
+              PendTer(),
+              Akun(),
+              btnEdit(38.h, 21.h, 16.sp, 18.sp),
+              btnKeluar(38.h, 0, 16.sp, 18.sp),
+            ],
+          )
+        : Container(
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: Text('AAAAAAAAAAAAAAAAA'),
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      abtme(),
+                      PendTer(),
+                      Akun(),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
   }
 }
