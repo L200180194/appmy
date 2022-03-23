@@ -347,7 +347,8 @@ class ProfilePage extends StatelessWidget {
             color: primaryColor,
             elevation: 0,
             onPressed: () {
-              Navigator.pushNamed(context, '/daftar');
+              // Navigator.pushNamed(context, '/daftar');
+              Navigator.pushNamed(context, '/editprofil');
             },
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -374,7 +375,7 @@ class ProfilePage extends StatelessWidget {
             color: alertColor,
             elevation: 0,
             onPressed: () {
-              // Navigator.pushNamed(context, '/home');
+              Navigator.pushNamed(context, '/detailinformasi');
             },
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),

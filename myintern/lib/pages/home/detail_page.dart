@@ -256,7 +256,7 @@ class DetailPage extends StatelessWidget {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             textColor: Colors.white,
             child: Text(
-              'Masuk',
+              'Daftar',
               style:
                   primaryTextStyle.copyWith(color: Colors.white, fontSize: txt),
             ),

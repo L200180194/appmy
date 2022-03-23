@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myintern/pages/home/daftar_magang.dart';
+import 'package:myintern/pages/home/editprofil_page.dart';
 import 'package:myintern/pages/home/detail_page.dart';
+import 'package:myintern/pages/home/detail_informasi_page.dart';
 import 'package:myintern/pages/home/main_page.dart';
 import 'package:myintern/pages/signin_page.dart';
 import 'package:myintern/pages/signup_page.dart';
@@ -31,6 +33,8 @@ class MyApp extends StatelessWidget {
           '/home': (context) => MainPage(),
           '/daftar': (context) => DaftarMagang(),
           '/detail': (context) => DetailPage(),
+          '/detailinformasi': (context) => DetailInformasiPage(),
+          '/editprofil': (context) => EditProfilPage(),
         },
         theme: ThemeData(
           primarySwatch: Colors.blue,
