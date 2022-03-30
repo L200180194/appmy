@@ -12,6 +12,8 @@ class AuthService {
       required String email,
       required String password}) async {
     var url = '$baseUrl/register';
+    // var urlregist = Uri.parse('http://127.0.0.1:8000/api/register');
+    var urlregist = Uri.parse('http://10.0.2.2:8000/api/register');
     var headers = {'Content-Type': 'application/json'};
     var body = jsonEncode({
       'name': name,
@@ -21,8 +23,8 @@ class AuthService {
       'password': password,
     });
 
-    var response =
-        await http.post(Uri.parse(url), headers: headers, body: body);
+    var response = await http.post(urlregist, headers: headers, body: body);
+    print(response.body);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body)['data'];
       UserModel user = UserModel.fromJson(data['user']);

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:myintern/models/user_model.dart';
 import 'package:myintern/services/auth_service.dart';
 
@@ -25,8 +25,10 @@ class AuthProvider with ChangeNotifier {
           email: email,
           password: password);
       _user = user;
+      print(_user);
       return true;
     } catch (e) {
+      print(e);
       return false;
     }
   }

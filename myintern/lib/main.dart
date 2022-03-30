@@ -9,6 +9,8 @@ import 'package:myintern/pages/home/main_page.dart';
 import 'package:myintern/pages/signin_page.dart';
 import 'package:myintern/pages/signup_page.dart';
 import 'package:myintern/pages/splash.dart';
+import 'package:myintern/providers/auth_providers.dart';
+import 'package:provider/provider.dart';
 import 'theme.dart';
 
 void main() {
@@ -19,25 +21,32 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(360, 640),
-      minTextAdapt: true,
-      builder: () => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        // home: SignInPage(),
-        routes: {
-          '/': (context) => SplashPage(),
-          '/signin': (context) => SignInPage(),
-          '/signup': (context) => SignUpPage(),
-          '/home': (context) => MainPage(),
-          '/daftar': (context) => DaftarMagang(),
-          '/detail': (context) => DetailPage(),
-          '/detailinformasi': (context) => DetailInformasiPage(),
-          '/editprofil': (context) => EditProfilPage(),
-        },
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => AuthProvider(),
+        )
+      ],
+      child: ScreenUtilInit(
+        designSize: const Size(360, 640),
+        minTextAdapt: true,
+        builder: () => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          // home: SignInPage(),
+          routes: {
+            '/': (context) => SplashPage(),
+            '/signin': (context) => SignInPage(),
+            '/signup': (context) => SignUpPage(),
+            '/home': (context) => MainPage(),
+            '/daftar': (context) => DaftarMagang(),
+            '/detail': (context) => DetailPage(),
+            '/detailinformasi': (context) => DetailInformasiPage(),
+            '/editprofil': (context) => EditProfilPage(),
+          },
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
         ),
       ),
     );
