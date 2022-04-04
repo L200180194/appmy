@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myintern/models/user_model.dart';
+import 'package:myintern/providers/auth_providers.dart';
 import 'package:myintern/theme.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider ap = Provider.of<AuthProvider>(context);
+    UserModel usr = ap.user;
+
     Widget header() {
       return Container(
         margin: EdgeInsets.only(bottom: defaultMargin),
@@ -33,6 +39,7 @@ class ProfilePage extends StatelessWidget {
               width: 100.h,
               margin: EdgeInsets.fromLTRB(9, 9, 15, 16),
               decoration: BoxDecoration(
+                  // image: DecorationImage(image: NetworkImage(user.foto_user)),
                   color: Colors.white,
                   border: Border.all(color: Colors.black12),
                   borderRadius: BorderRadius.circular(5),
@@ -43,10 +50,11 @@ class ProfilePage extends StatelessWidget {
                         blurRadius: 7.0,
                         spreadRadius: 3),
                   ]),
-              child: Image.asset('assets/tokopedia.png'),
+              child: Image.network(
+                  'http://10.0.2.2:8000/storage/${usr.foto_user}'),
             ),
             Text(
-              'Alfianto Andy P',
+              '${usr.name}',
               style: primaryTextStyle.copyWith(
                   color: Colors.white, fontSize: 18.sp, fontWeight: bold),
             )
@@ -95,7 +103,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     flex: 4,
                     child: Text(
-                      'Alfianto Andy P',
+                      '${usr.name}',
                       style: primaryTextStyle.copyWith(
                         fontSize: 12.sp,
                       ),
@@ -119,7 +127,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     flex: 4,
                     child: Text(
-                      'Gajahwongan 03/05, Canden, Sambi, Boyolali',
+                      '${usr.alamat_user}',
                       style: primaryTextStyle.copyWith(
                         fontSize: 12.sp,
                       ),
@@ -143,7 +151,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     flex: 4,
                     child: Text(
-                      '1234567890',
+                      '${usr.notlp_user}',
                       style: primaryTextStyle.copyWith(
                         fontSize: 12.sp,
                       ),

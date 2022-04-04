@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:myintern/pages/widget/loading_button.dart';
+import 'package:myintern/providers/auth_providers.dart';
 import 'package:myintern/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+import 'package:provider/provider.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -12,11 +16,47 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  TextEditingController emailController = TextEditingController(text: '');
+  TextEditingController passwordController = TextEditingController(text: '');
+
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  int lengthpass = 0;
+  _onChangedHuruf(String value) {
+    setState(() {
+      lengthpass = value.length;
+    });
+  }
+
+  bool isLoading = false;
   bool _isObscure = true;
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenwidth = MediaQuery.of(context).size.width;
+    AuthProvider ap = Provider.of<AuthProvider>(context);
+    // ignore: unused_element
+    handleSignIn() async {
+      setState(() {
+        isLoading = true;
+      });
+      if (await ap.login(
+        email: emailController.text,
+        password: passwordController.text,
+      )) {
+        Navigator.popAndPushNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: alertColor,
+            content: Text(
+              "Gagal Login",
+              style: primaryTextStyle.copyWith(color: Colors.white),
+            )));
+      }
+      setState(() {
+        isLoading = false;
+      });
+    }
+
     Widget banner() {
       return Container(
         // color: Colors.amber,
@@ -60,9 +100,18 @@ class _SignInPageState extends State<SignInPage> {
                   fontWeight: semibold, fontSize: email),
             ),
             Container(
-              height: containerh,
+              constraints: BoxConstraints(minHeight: containerh),
+              // height: containerh,
               child: Center(
                 child: TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: MultiValidator(
+                    [
+                      RequiredValidator(errorText: "Tidak Boleh Kosong "),
+                      EmailValidator(errorText: "Bukan Merupakan Email")
+                    ],
+                  ),
+                  controller: emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: 'example.gmail.com',
@@ -70,6 +119,8 @@ class _SignInPageState extends State<SignInPage> {
                         borderSide: BorderSide(
                       color: Colors.black,
                     )),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: primaryColor, width: 2)),
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: primaryColor, width: 2)),
                     errorBorder: OutlineInputBorder(
@@ -101,8 +152,17 @@ class _SignInPageState extends State<SignInPage> {
                   fontWeight: semibold, fontSize: txt),
             ),
             Container(
-              height: containerh,
+              // height: containerh,
               child: TextFormField(
+                controller: passwordController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Tidak boleh kosong";
+                  } else if (value.length < 8) {
+                    return " Kurang dari 8 karakter ";
+                  }
+                },
                 obscureText: _isObscure,
                 enableSuggestions: false,
                 autocorrect: false,
@@ -111,6 +171,8 @@ class _SignInPageState extends State<SignInPage> {
                       borderSide: BorderSide(
                     color: Colors.black,
                   )),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: primaryColor, width: 2)),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: primaryColor, width: 2)),
                   errorBorder: OutlineInputBorder(
@@ -150,7 +212,8 @@ class _SignInPageState extends State<SignInPage> {
             color: primaryColor,
             elevation: 0,
             onPressed: () {
-              Navigator.pushNamed(context, '/home');
+              // Navigator.pushNamed(context, '/home');
+              handleSignIn();
             },
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -199,7 +262,7 @@ class _SignInPageState extends State<SignInPage> {
                       banner(),
                       emailInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
                       passInput(18.sp, 38.h, 10.w, 15.h, 20.sp, 14.sp),
-                      btnlogin(38.h, 21.h, 18.sp),
+                      isLoading ? LoadingButton() : btnlogin(38.h, 21.h, 18.sp),
                       text(12.sp, 12.sp),
                     ],
                   )
