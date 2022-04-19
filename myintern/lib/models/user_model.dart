@@ -1,4 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:myintern/models/kota_model.dart';
+import 'package:myintern/models/pendidikan_model.dart';
+import 'package:myintern/models/prodi_model.dart';
+import 'package:myintern/models/skill_model.dart';
 
 class UserModel {
   int? id;
@@ -9,10 +13,10 @@ class UserModel {
   String? email;
   String? password;
   String? notlp_user;
-  int? kota_id;
-  int? pendidikan_id;
-  int? prodi_id;
-  int? skill_id;
+  KotaModel? kota;
+  PendidikanModel? pendidikan;
+  ProdiModel? prodi;
+  SkillModel? skill;
   String? token;
   UserModel(
       {this.id,
@@ -22,11 +26,11 @@ class UserModel {
       this.cv_user,
       this.email,
       this.notlp_user,
-      this.kota_id,
+      this.kota,
       this.password,
-      this.pendidikan_id,
-      this.prodi_id,
-      this.skill_id,
+      this.pendidikan,
+      this.prodi,
+      this.skill,
       this.token});
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -38,10 +42,10 @@ class UserModel {
     notlp_user = json['notlp_user'];
     email = json['email'];
     password = json['password'];
-    kota_id = json['kota_id'];
-    pendidikan_id = json['pendidikan_id'];
-    prodi_id = json['prodi_id'];
-    skill_id = json['skill_id'];
+    kota = KotaModel.fomJson(json['kota']);
+    pendidikan = PendidikanModel.fromJson(json['pendidikan']);
+    prodi = ProdiModel.fromJson(json['prodi']);
+    skill = SkillModel.fromJson(json['skill']);
     token = json['token'];
   }
   Map<String, dynamic> toJson() {
@@ -54,10 +58,10 @@ class UserModel {
       'notlp_user': notlp_user,
       'email': email,
       'password': password,
-      'kota_id': kota_id,
-      'pendidikan_id': pendidikan_id,
-      'prodi_id': prodi_id,
-      'skill_id': skill_id,
+      'kota': kota!.toJson(),
+      'pendidikan': pendidikan!.toJson(),
+      'prodi': prodi!.toJson(),
+      'skill': skill!.toJson(),
       'token': token,
     };
   }

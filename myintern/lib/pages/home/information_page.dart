@@ -12,7 +12,7 @@ class InformationPage extends StatelessWidget {
             children: [
               // Text('Home Page'),
               // Image.asset('assets/tokopedia.png'),
-              PosisiCard(),
+              // PosisiCard(),
             ],
           )
         : ListView(

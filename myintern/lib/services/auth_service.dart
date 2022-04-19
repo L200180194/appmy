@@ -4,7 +4,7 @@ import 'package:myintern/models/user_model.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  String baseUrl = 'http://127.0.0.1:8000/api';
+  // String baseUrl = 'http://127.0.0.1:8000/api';
 
   Future<UserModel> register(
       {required String name,
@@ -12,7 +12,8 @@ class AuthService {
       required String alamat_user,
       required String email,
       required String password}) async {
-    var url = '$baseUrl/register';
+    var token;
+    // var url = '$baseUrl/register';
     // var urlregist = Uri.parse('http://127.0.0.1:8000/api/register');
     var urlregist = Uri.parse('http://10.0.2.2:8000/api/register');
     var headers = {'Content-Type': 'application/json'};
@@ -38,8 +39,8 @@ class AuthService {
 
   Future<UserModel> login(
       {required String email, required String password}) async {
-    var url = '$baseUrl/register';
-    // var urlregist = Uri.parse('http://127.0.0.1:8000/api/register');
+    // var url = '$baseUrl/register';
+    // var urlregist = Uri.parse('http://192.168.0.115:8000/api/register');
     var urlregist = Uri.parse('http://10.0.2.2:8000/api/login');
     var headers = {'Content-Type': 'application/json'};
     var body = jsonEncode({

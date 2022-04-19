@@ -10,6 +10,7 @@ import 'package:myintern/pages/signin_page.dart';
 import 'package:myintern/pages/signup_page.dart';
 import 'package:myintern/pages/splash.dart';
 import 'package:myintern/providers/auth_providers.dart';
+import 'package:myintern/providers/posisi_provider.dart';
 import 'package:provider/provider.dart';
 import 'theme.dart';
 
@@ -25,7 +26,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => AuthProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => PosisiProvider(),
+        ),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 640),
@@ -40,7 +44,7 @@ class MyApp extends StatelessWidget {
             '/signup': (context) => SignUpPage(),
             '/home': (context) => MainPage(),
             '/daftar': (context) => DaftarMagang(),
-            '/detail': (context) => DetailPage(),
+            // '/detail': (context) => DetailPage(),
             '/detailinformasi': (context) => DetailInformasiPage(),
             '/editprofil': (context) => EditProfilPage(),
           },

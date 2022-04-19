@@ -1,11 +1,26 @@
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
-import 'package:myintern/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class DetailPage extends StatelessWidget {
-  const DetailPage({Key? key}) : super(key: key);
+import 'package:myintern/models/posisi_model.dart';
+import 'package:myintern/theme.dart';
 
+class DetailPage extends StatefulWidget {
+  // const DetailPage({
+  //   Key? key,
+  //   required this.posisi,
+  // }) : super(key: key);
+  final PosisiModel posisi;
+  const DetailPage({
+    Key? key,
+    required this.posisi,
+  }) : super(key: key);
+
+  @override
+  _DetailPageState createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     Widget banner() {
@@ -55,11 +70,11 @@ class DetailPage extends StatelessWidget {
                         blurRadius: 7.0,
                         spreadRadius: 3),
                   ]),
-              child: Image.asset('assets/tokopedia.png'),
+              child: Image.network('${widget.posisi.foto_posisi}'),
             ),
             Center(
               child: Text(
-                'BACKEND PROGRAMMER ',
+                '${widget.posisi.nama_posisi}',
                 textAlign: TextAlign.center,
                 style: primaryTextStyle.copyWith(
                     fontSize: 18.sp, fontWeight: bold),
@@ -70,7 +85,7 @@ class DetailPage extends StatelessWidget {
             ),
             Center(
               child: Text(
-                'Jakarta Pusat',
+                '${widget.posisi.perusahaan!.alamat_perusahaan}',
                 textAlign: TextAlign.center,
                 style: primaryTextStyle.copyWith(
                     fontSize: 12.sp, fontWeight: regular),
@@ -110,7 +125,7 @@ class DetailPage extends StatelessWidget {
               height: 10.h,
             ),
             Text(
-              'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum id numquam aspernatur, ullam corporis minus autem eum et facere accusamus nam magnam delectus asperiores eligendi eius nulla aut? Atque, ducimus! ',
+              '${widget.posisi.deskripsi_posisi}',
               textAlign: TextAlign.justify,
               style: primaryTextStyle.copyWith(
                   fontSize: 12.sp, fontWeight: regular),
@@ -149,7 +164,7 @@ class DetailPage extends StatelessWidget {
               height: 10.h,
             ),
             Text(
-              'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum id numquam aspernatur, ullam corporis minus autem eum et facere accusamus nam magnam delectus asperiores eligendi eius nulla aut? Atque, ducimus! ',
+              '${widget.posisi.persyaratan_posisi}',
               textAlign: TextAlign.justify,
               style: primaryTextStyle.copyWith(
                   fontSize: 12.sp, fontWeight: regular),
@@ -188,7 +203,7 @@ class DetailPage extends StatelessWidget {
               height: 10.h,
             ),
             Text(
-              'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum id numquam aspernatur, ullam corporis minus autem eum et facere accusamus nam magnam delectus asperiores eligendi eius nulla aut? Atque, ducimus! ',
+              '${widget.posisi.fasilitas_posisi}',
               textAlign: TextAlign.justify,
               style: primaryTextStyle.copyWith(
                   fontSize: 12.sp, fontWeight: regular),
@@ -227,7 +242,7 @@ class DetailPage extends StatelessWidget {
               height: 10.h,
             ),
             Text(
-              'Lorem,aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ipsum dolor sit amet consectetur adipisicing elit. Dolorum id numquam aspernatur, ullam corporis minus autem eum et facere accusamus nam magnam delectus asperiores eligendi eius nulla aut? Atque, ducimus! ',
+              '${widget.posisi.keterangan_posisi}',
               textAlign: TextAlign.justify,
               style: primaryTextStyle.copyWith(
                   fontSize: 12.sp, fontWeight: regular),

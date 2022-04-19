@@ -175,7 +175,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     flex: 4,
                     child: Text(
-                      'Web Programming',
+                      '${usr.skill!.nama_skill}',
                       style: primaryTextStyle.copyWith(
                         fontSize: 12.sp,
                       ),
@@ -227,7 +227,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     flex: 4,
                     child: Text(
-                      'Universitas Muhammadiyah Surakarta',
+                      '${usr.pendidikan!.tingkat_pendidikan}',
                       style: primaryTextStyle.copyWith(
                         fontSize: 12.sp,
                       ),
@@ -251,7 +251,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     flex: 4,
                     child: Text(
-                      'S1 - Informatika',
+                      '${usr.prodi!.nama_prodi}',
                       style: primaryTextStyle.copyWith(
                         fontSize: 12.sp,
                       ),
@@ -303,7 +303,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     flex: 4,
                     child: Text(
-                      'alfiantoandy@gmail.com',
+                      '${usr.email}',
                       style: primaryTextStyle.copyWith(
                         fontSize: 12.sp,
                       ),

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:myintern/models/posisi_model.dart';
+import 'package:myintern/pages/home/detail_page.dart';
 import 'package:myintern/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PosisiCard extends StatelessWidget {
-  const PosisiCard({Key? key}) : super(key: key);
+  // const PosisiCard({Key? key}) : super(key: key);
+  final PosisiModel posisi;
+  PosisiCard(this.posisi);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +18,13 @@ class PosisiCard extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, '/detail');
+            // Navigator.pushNamed(context, '/detail');
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DetailPage(
+                          posisi: posisi,
+                        )));
           },
           child: Container(
             height: 105.h,
@@ -50,7 +60,7 @@ class PosisiCard extends StatelessWidget {
                                 blurRadius: 7.0,
                                 spreadRadius: 3),
                           ]),
-                      child: Image.asset('assets/tokopedia.png'),
+                      child: Image.network('${posisi.foto_posisi}'),
                     ),
                     Container(
                       height: 50.h,
@@ -61,7 +71,7 @@ class PosisiCard extends StatelessWidget {
                           SizedBox(
                             width: 220.w,
                             child: Text(
-                              "BACKEND PROGRAMMER aaaaaaaaa aaaaaaaaa aaaa aaaaaaaaa",
+                              '${posisi.nama_posisi}',
                               overflow: TextOverflow.ellipsis,
                               softWrap: false,
                               style: primaryTextStyle.copyWith(
@@ -73,7 +83,7 @@ class PosisiCard extends StatelessWidget {
                             child: SizedBox(
                               width: 210.w,
                               child: Text(
-                                "TOKOPEDIA",
+                                "${posisi.perusahaan!.nama_perusahaan}",
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: false,
@@ -97,27 +107,28 @@ class PosisiCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             color: blueclipColor),
                         child: Text(
-                          'Kalimantan Barat',
-                          style: primaryTextStyle.copyWith(fontSize: 12.sp),
+                          '${posisi.perusahaan!.alamat_perusahaan}',
+                          style: primaryTextStyle.copyWith(fontSize: 5.sp),
                         )),
-                    Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 10.w, vertical: 2.h),
-                        margin: EdgeInsets.only(left: 4.w),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: blueclipColor),
-                        child: Text(
-                          'Paid',
-                          style: primaryTextStyle.copyWith(fontSize: 12.sp),
-                        )),
+                    // Container(
+                    //     padding: EdgeInsets.symmetric(
+                    //         horizontal: 10.w, vertical: 2.h),
+                    //     margin: EdgeInsets.only(left: 4.w),
+                    //     decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //         color: blueclipColor),
+                    //     child: Text(
+                    //       '${posisi.keterangan_posisi}',
+                    //       overflow: TextOverflow.ellipsis,
+                    //       style: primaryTextStyle.copyWith(fontSize: 12.sp),
+                    //     )),
                     Expanded(
                         flex: 2,
                         child: Container(
                             margin: EdgeInsets.only(right: 20.w),
                             alignment: Alignment.centerRight,
                             child: Text(
-                              '30/01/2022',
+                              '${posisi.deadline_posisi}',
                               style: primaryTextStyle.copyWith(fontSize: 12.sp),
                             )))
                   ],
