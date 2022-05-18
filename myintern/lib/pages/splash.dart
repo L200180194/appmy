@@ -20,8 +20,9 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   getInit() async {
-    await Provider.of<PosisiProvider>(context, listen: false).getPosisi();
-    Navigator.popAndPushNamed(context, '/signin');
+    Timer(Duration(seconds: 1),
+        () => Navigator.popAndPushNamed(context, '/signin'));
+    super.initState();
   }
 
   Widget build(BuildContext context) {

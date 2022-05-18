@@ -3,6 +3,7 @@ import 'package:myintern/models/posisi_model.dart';
 import 'package:myintern/pages/home/detail_page.dart';
 import 'package:myintern/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PosisiCard extends StatelessWidget {
   // const PosisiCard({Key? key}) : super(key: key);

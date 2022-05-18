@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:myintern/models/user_model.dart';
 import 'package:myintern/pages/widget/loading_button.dart';
 import 'package:myintern/providers/auth_providers.dart';
+import 'package:myintern/providers/posisi_provider.dart';
 import 'package:myintern/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';

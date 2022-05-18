@@ -51,7 +51,7 @@ class ProfilePage extends StatelessWidget {
                         spreadRadius: 3),
                   ]),
               child: Image.network(
-                  'http://10.0.2.2:8000/storage/${usr.foto_user}'),
+                  'http://portofoliome.my.id/storage/${usr.foto_user}'),
             ),
             Text(
               '${usr.name}',

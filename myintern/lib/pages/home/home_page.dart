@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:myintern/models/user_model.dart';
 import 'package:myintern/pages/widget/posisi_card.dart';
 import 'package:myintern/pages/widget/posisi_cardlandscape.dart';
@@ -16,21 +20,43 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isLoading = true;
+  void initState() {
+    getInit();
+    super.initState();
+  }
+
+  getInit() async {
+    await Provider.of<PosisiProvider>(context, listen: false).getPosisi();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
-  bool isLoading = false;
   Widget build(BuildContext context) {
     PosisiProvider pp = Provider.of<PosisiProvider>(context);
+    AuthProvider ap = Provider.of<AuthProvider>(context);
+    UserModel usr = ap.user;
 
-    return (MediaQuery.of(context).orientation == Orientation.portrait)
-        ? ListView(
-            children: pp.posisis.map((posisi) => PosisiCard(posisi)).toList())
-        : ListView(
-            children: [
-              // Text('Home Page'),
-              // Image.asset('assets/tokopedia.png'),
+    return (isLoading == true)
+        ? Container(
+            child: SpinKitRotatingCircle(
+              color: Colors.blue,
+              size: 50.0,
+            ),
+          )
+        : (MediaQuery.of(context).orientation == Orientation.portrait)
+            ? ListView(
+                children:
+                    pp.posisis.map((posisi) => PosisiCard(posisi)).toList())
+            : ListView(
+                children: [
+                  // Text('Home Page'),
+                  // Image.asset('assets/tokopedia.png'),
 
-              PosisiCardLandscape(),
-            ],
-          );
+                  PosisiCardLandscape(),
+                ],
+              );
   }
 }

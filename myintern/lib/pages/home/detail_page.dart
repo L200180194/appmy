@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:myintern/models/posisi_model.dart';
 import 'package:myintern/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailPage extends StatefulWidget {
   // const DetailPage({
@@ -21,6 +22,12 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  // Future getToken() async {
+  //   SharedPreferences token = await SharedPreferences.getInstance();
+  //   return token.getString('token');
+  // }
+  SharedPreferences? pr;
+
   @override
   Widget build(BuildContext context) {
     Widget banner() {
@@ -242,7 +249,9 @@ class _DetailPageState extends State<DetailPage> {
               height: 10.h,
             ),
             Text(
-              '${widget.posisi.keterangan_posisi}',
+              // '${widget.posisi.keterangan_posisi}',
+              '${this.pr?.getString('token')}',
+
               textAlign: TextAlign.justify,
               style: primaryTextStyle.copyWith(
                   fontSize: 12.sp, fontWeight: regular),
