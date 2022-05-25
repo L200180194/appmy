@@ -4,9 +4,74 @@ import 'package:myintern/models/user_model.dart';
 import 'package:myintern/providers/auth_providers.dart';
 import 'package:myintern/theme.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  bool isLoading = true;
+  String name = '';
+  int id = 0;
+  String alamat = '';
+  String foto = '';
+  String cv = '';
+  String notlp = '';
+  String email = '';
+  String token = '';
+  String skill = '';
+  String prodi = '';
+  String kota = '';
+  String pendidikan = '';
+  void initState() {
+    getSession();
+    getInit();
+    super.initState();
+  }
+
+  Future<String> getSession() async {
+    final sp = await SharedPreferences.getInstance();
+    setState(() {
+      name = sp.getString('name').toString();
+      alamat = sp.getString('alamat').toString();
+      foto =
+          'http://portofoliome.my.id/storage/${sp.getString('foto').toString()}';
+      cv = sp.getString('cv').toString();
+      notlp = sp.getString('notlp').toString();
+      email = sp.getString('email').toString();
+      token = sp.getString('token').toString();
+      skill = sp.getString('skill').toString();
+      prodi = sp.getString('prodi').toString();
+      kota = sp.getString('kota').toString();
+      pendidikan = sp.getString('pendidikan').toString();
+      id = sp.getInt('id')!.toInt();
+    });
+    // print(alamat);
+    // print(name);
+    // print(id);
+    // print(cv);
+    // print(foto);
+    // print(pendidikan);
+    // print(skill);
+    // print(prodi);
+    // print(kota);
+    // print(email);
+    // print(token);
+    // print(notlp);
+    return name;
+  }
+
+  getInit() async {
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  // String fotoUrl = 'http://portofoliome.my.id/storage/${foto}';
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +119,7 @@ class ProfilePage extends StatelessWidget {
                   'http://portofoliome.my.id/storage/${usr.foto_user}'),
             ),
             Text(
-              '${usr.name}',
+              name,
               style: primaryTextStyle.copyWith(
                   color: Colors.white, fontSize: 18.sp, fontWeight: bold),
             )
@@ -103,7 +168,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     flex: 4,
                     child: Text(
-                      '${usr.name}',
+                      name,
                       style: primaryTextStyle.copyWith(
                         fontSize: 12.sp,
                       ),
@@ -127,7 +192,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     flex: 4,
                     child: Text(
-                      '${usr.alamat_user}',
+                      alamat,
                       style: primaryTextStyle.copyWith(
                         fontSize: 12.sp,
                       ),
@@ -151,7 +216,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     flex: 4,
                     child: Text(
-                      '${usr.notlp_user}',
+                      notlp,
                       style: primaryTextStyle.copyWith(
                         fontSize: 12.sp,
                       ),
@@ -175,7 +240,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     flex: 4,
                     child: Text(
-                      '${usr.skill!.nama_skill}',
+                      skill,
                       style: primaryTextStyle.copyWith(
                         fontSize: 12.sp,
                       ),
@@ -227,7 +292,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     flex: 4,
                     child: Text(
-                      '${usr.pendidikan!.tingkat_pendidikan}',
+                      pendidikan,
                       style: primaryTextStyle.copyWith(
                         fontSize: 12.sp,
                       ),
@@ -251,7 +316,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     flex: 4,
                     child: Text(
-                      '${usr.prodi!.nama_prodi}',
+                      prodi,
                       style: primaryTextStyle.copyWith(
                         fontSize: 12.sp,
                       ),
@@ -303,7 +368,7 @@ class ProfilePage extends StatelessWidget {
                   Expanded(
                     flex: 4,
                     child: Text(
-                      '${usr.email}',
+                      email,
                       style: primaryTextStyle.copyWith(
                         fontSize: 12.sp,
                       ),

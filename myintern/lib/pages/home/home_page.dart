@@ -36,12 +36,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     PosisiProvider pp = Provider.of<PosisiProvider>(context);
-    AuthProvider ap = Provider.of<AuthProvider>(context);
-    UserModel usr = ap.user;
+    // AuthProvider ap = Provider.of<AuthProvider>(context);
+    // UserModel usr = ap.user;
 
     return (isLoading == true)
         ? Container(
-            child: SpinKitRotatingCircle(
+            child: SpinKitRing(
               color: Colors.blue,
               size: 50.0,
             ),

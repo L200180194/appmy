@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:myintern/providers/posisi_provider.dart';
 import 'package:myintern/theme.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -19,9 +20,23 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
   }
 
+  Future<String> getSession() async {
+    final sp = await SharedPreferences.getInstance();
+    String token = sp.getString('token').toString();
+    return token;
+  }
+
   getInit() async {
-    Timer(Duration(seconds: 1),
-        () => Navigator.popAndPushNamed(context, '/signin'));
+    getSession().then((value) {
+      if (value != null || value != '') {
+        Timer(Duration(seconds: 1),
+            () => Navigator.popAndPushNamed(context, '/home'));
+      } else {
+        Timer(Duration(seconds: 1),
+            () => Navigator.popAndPushNamed(context, '/signin'));
+      }
+    });
+
     super.initState();
   }
 

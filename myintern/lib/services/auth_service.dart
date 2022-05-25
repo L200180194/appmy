@@ -56,6 +56,25 @@ class AuthService {
       UserModel user = UserModel.fromJson(data['user']);
       user.token = 'Bearer ' + data['access_token'];
       setToken(data['access_token']);
+      // print(data['user']['name']);
+      final sp = await SharedPreferences.getInstance();
+      sp.setInt('id', data['user']['id']);
+      sp.setString("name", data['user']['name'].toString());
+      sp.setString("alamat", data['user']['alamat_user']);
+      sp.setString("foto", data['user']['foto_user']);
+      sp.setString("cv", data['user']['cv_user']);
+      sp.setString("notlp", data['user']['notlp_user']);
+      sp.setString('email', data['user']['email']);
+      sp.setString('token', data['access_token']);
+      sp.setString('skill', data['user']['skill']['nama_skill']);
+      sp.setString('prodi', data['user']['prodi']['nama_prodi']);
+      sp.setString('kota', data['user']['kota']['nama_kota']);
+      sp.setString(
+          'pendidikan', data['user']['pendidikan']['tingkat_pendidikan']);
+      var em = sp.getString('name');
+      print(em);
+      // print(data['user']['pendidikan']['tingkat_pendidikan']);
+
       return user;
     } else {
       throw Exception('Gagal Login');

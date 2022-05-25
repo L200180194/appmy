@@ -12,7 +12,7 @@ class PosisiService {
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(urlallposisi, headers: headers);
-    print(response.body);
+    // print(response.body);
     if (response.statusCode == 200) {
       List data = jsonDecode(response.body)['data']['data'];
       List<PosisiModel> posisi = [];
