@@ -46,5 +46,16 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> logout({required String token}) async {
+    try {
+      print('masuk provider');
+      bool user = await AuthService().logout(token: token);
+      return user;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   void autoLogin() {}
 }

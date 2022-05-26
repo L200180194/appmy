@@ -37,6 +37,28 @@ class AuthService {
     }
   }
 
+  Future<bool> logout({required String token}) async {
+    // var url = '$baseUrl/register';
+    // var urlregist = Uri.parse('http://127.0.0.1:8000/api/register');
+    var urllogout = Uri.parse('http://portofoliome.my.id/api/logout');
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    };
+    print('ini token');
+    print(token);
+    var response = await http.post(urllogout, headers: headers);
+    print(response.body);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body)['meta'];
+      // dynamic msg = data['msg'];
+      // print(data);
+      return true;
+    } else {
+      throw Exception('Gagal Register');
+    }
+  }
+
   Future<UserModel> login(
       {required String email, required String password}) async {
     // var url = '$baseUrl/register';

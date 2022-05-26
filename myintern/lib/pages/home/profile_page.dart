@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:myintern/models/user_model.dart';
 import 'package:myintern/providers/auth_providers.dart';
 import 'package:myintern/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:myintern/services/auth_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -33,6 +37,22 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
   }
 
+  logout() async {
+    final sp = await SharedPreferences.getInstance();
+    sp.remove('name');
+    sp.remove('alamat');
+    sp.remove('foto');
+    sp.remove('cv');
+    sp.remove('notlp');
+    sp.remove('email');
+    sp.remove('token');
+    sp.remove('skill');
+    sp.remove('prodi');
+    sp.remove('kota');
+    sp.remove('pendidikan');
+    sp.remove('id');
+  }
+
   Future<String> getSession() async {
     final sp = await SharedPreferences.getInstance();
     setState(() {
@@ -50,33 +70,40 @@ class _ProfilePageState extends State<ProfilePage> {
       pendidikan = sp.getString('pendidikan').toString();
       id = sp.getInt('id')!.toInt();
     });
-    // print(alamat);
-    // print(name);
-    // print(id);
-    // print(cv);
     // print(foto);
-    // print(pendidikan);
-    // print(skill);
-    // print(prodi);
-    // print(kota);
-    // print(email);
-    // print(token);
-    // print(notlp);
     return name;
   }
 
   getInit() async {
-    setState(() {
-      isLoading = false;
-    });
+    Timer(
+        Duration(milliseconds: 400),
+        () => setState(() {
+              isLoading = false;
+            }));
   }
 
   // String fotoUrl = 'http://portofoliome.my.id/storage/${foto}';
 
   @override
   Widget build(BuildContext context) {
+    // AuthProvider ap = Provider.of<AuthProvider>(context);
+    // UserModel usr = ap.user;
+
     AuthProvider ap = Provider.of<AuthProvider>(context);
-    UserModel usr = ap.user;
+    // ignore: unused_element
+    handleLogout() async {
+      if (await ap.logout(token: token)) {
+        print('berhasil Logout');
+        Navigator.popAndPushNamed(context, '/signin');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: alertColor,
+            content: Text(
+              "Gagal logout",
+              style: primaryTextStyle.copyWith(color: Colors.white),
+            )));
+      }
+    }
 
     Widget header() {
       return Container(
@@ -115,8 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         blurRadius: 7.0,
                         spreadRadius: 3),
                   ]),
-              child: Image.network(
-                  'http://portofoliome.my.id/storage/${usr.foto_user}'),
+              child: Image.network(foto),
             ),
             Text(
               name,
@@ -448,7 +474,9 @@ class _ProfilePageState extends State<ProfilePage> {
             color: alertColor,
             elevation: 0,
             onPressed: () {
-              Navigator.pushNamed(context, '/detailinformasi');
+              handleLogout();
+              logout();
+              // Navigator.pushNamed(context, '/detailinformasi');
             },
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -461,36 +489,43 @@ class _ProfilePageState extends State<ProfilePage> {
           ));
     }
 
-    return (MediaQuery.of(context).orientation == Orientation.portrait)
-        ? ListView(
-            children: [
-              header(),
-              abtme(),
-              PendTer(),
-              Akun(),
-              btnEdit(38.h, 21.h, 16.sp, 18.sp),
-              btnKeluar(38.h, 0, 16.sp, 18.sp),
-            ],
-          )
-        : Container(
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: Text('AAAAAAAAAAAAAAAAA'),
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    children: [
-                      abtme(),
-                      PendTer(),
-                      Akun(),
-                    ],
-                  ),
-                )
-              ],
+    return (isLoading == true)
+        ? Container(
+            child: SpinKitRing(
+              color: Colors.blue,
+              size: 50.0,
             ),
-          );
+          )
+        : (MediaQuery.of(context).orientation == Orientation.portrait)
+            ? ListView(
+                children: [
+                  header(),
+                  abtme(),
+                  PendTer(),
+                  Akun(),
+                  btnEdit(38.h, 21.h, 16.sp, 18.sp),
+                  btnKeluar(38.h, 0, 16.sp, 18.sp),
+                ],
+              )
+            : Container(
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: Text('AAAAAAAAAAAAAAAAA'),
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        children: [
+                          abtme(),
+                          PendTer(),
+                          Akun(),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              );
   }
 }

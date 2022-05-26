@@ -20,22 +20,29 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
   }
 
+  late String tkn;
+
   Future<String> getSession() async {
     final sp = await SharedPreferences.getInstance();
-    String token = sp.getString('token').toString();
+    String token = sp.getString('token') ?? '';
+    setState(() {
+      tkn = token;
+    });
     return token;
   }
 
   getInit() async {
     getSession().then((value) {
-      if (value != null || value != '') {
+      print(value);
+      if (value != '') {
         Timer(Duration(seconds: 1),
             () => Navigator.popAndPushNamed(context, '/home'));
-      } else {
+      } else if (value == '') {
         Timer(Duration(seconds: 1),
             () => Navigator.popAndPushNamed(context, '/signin'));
       }
     });
+    // if (tkn == null) {}
 
     super.initState();
   }
