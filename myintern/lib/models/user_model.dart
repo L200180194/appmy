@@ -37,12 +37,12 @@ class UserModel {
     id = json['id'];
     name = json['name'];
     alamat_user = json['alamat_user'];
-    foto_user = json['foto_user'];
-    cv_user = json['cv_user'];
+    foto_user = json['foto_user'] ?? '';
+    cv_user = json['cv_user'] ?? "";
     notlp_user = json['notlp_user'];
     email = json['email'];
     password = json['password'];
-    kota = KotaModel.fomJson(json['kota']);
+    kota = KotaModel.fromJson(json['kota']);
     pendidikan = PendidikanModel.fromJson(json['pendidikan']);
     prodi = ProdiModel.fromJson(json['prodi']);
     skill = SkillModel.fromJson(json['skill']);

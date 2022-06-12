@@ -10,6 +10,7 @@ import 'package:myintern/pages/signin_page.dart';
 import 'package:myintern/pages/signup_page.dart';
 import 'package:myintern/pages/splash.dart';
 import 'package:myintern/providers/auth_providers.dart';
+import 'package:myintern/providers/informasi_providers.dart';
 import 'package:myintern/providers/posisi_provider.dart';
 import 'package:provider/provider.dart';
 import 'theme.dart';
@@ -29,6 +30,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => PosisiProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => InformasiProviders(),
         ),
       ],
       child: ScreenUtilInit(

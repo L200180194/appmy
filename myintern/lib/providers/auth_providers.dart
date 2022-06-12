@@ -4,6 +4,7 @@ import 'package:myintern/services/auth_service.dart';
 
 class AuthProvider with ChangeNotifier {
   late UserModel _user;
+  late dynamic data;
 
   UserModel get user => _user;
   set user(UserModel user) {
@@ -16,18 +17,32 @@ class AuthProvider with ChangeNotifier {
       required String notlp_user,
       required String alamat_user,
       required String email,
-      required String password}) async {
+      required String password,
+      required String kota_id,
+      required String prodi_id,
+      required String pendidikan_id,
+      required String skill_id,
+      required String path,
+      required String fn}) async {
     try {
-      UserModel user = await AuthService().register(
+      data = await AuthService().register(
           name: name,
           notlp_user: notlp_user,
           alamat_user: alamat_user,
           email: email,
-          password: password);
-      _user = user;
-      print(_user);
+          password: password,
+          kota_id: kota_id,
+          pendidikan_id: pendidikan_id,
+          prodi_id: prodi_id,
+          skill_id: skill_id,
+          fn: fn,
+          path: path);
+      // _user = user;
+      print(data);
+      print('provider berhasil');
       return true;
     } catch (e) {
+      print('provider gagal');
       print(e);
       return false;
     }

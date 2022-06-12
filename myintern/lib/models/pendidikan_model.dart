@@ -1,16 +1,30 @@
-class PendidikanModel {
-  int? id;
-  String? tingkat_pendidikan;
+import 'dart:convert';
 
+PendidikanModel pendidikanModelFromJson(String str) =>
+    PendidikanModel.fromJson(json.decode(str));
+
+String pendidikanModelToJson(PendidikanModel data) =>
+    json.encode(data.toJson());
+
+class PendidikanModel {
   PendidikanModel({
-    this.id,
-    this.tingkat_pendidikan,
+    required this.id,
+    required this.tingkatPendidikan,
   });
-  PendidikanModel.fromJson(Map<String, dynamic> json) {
-    id = json[id];
-    tingkat_pendidikan = json['tingkat_pendidikan'];
-  }
-  Map<String, dynamic> toJson() {
-    return {'id': id, 'tingkat_pendidikan': tingkat_pendidikan};
-  }
+
+  int id;
+  String tingkatPendidikan;
+
+  factory PendidikanModel.fromJson(Map<String, dynamic> json) =>
+      PendidikanModel(
+        id: json["id"],
+        tingkatPendidikan: json["tingkat_pendidikan"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "tingkat_pendidikan": tingkatPendidikan,
+      };
+  @override
+  String toString() => tingkatPendidikan;
 }

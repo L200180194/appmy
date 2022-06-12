@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:myintern/providers/informasi_providers.dart';
 import 'package:myintern/providers/posisi_provider.dart';
 import 'package:myintern/theme.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,7 +34,26 @@ class _SplashPageState extends State<SplashPage> {
     return token;
   }
 
+  // Future<List> getKota() async {
+  //   var urlKota = Uri.parse('http://portofoliome.my.id/api/kota/all');
+  //   var headers = {'Content-Type': 'application/json'};
+  //   var response = await http.get(urlKota, headers: headers);
+  //   print(response);
+  //   if (response.statusCode == 200) {
+  //     List<dynamic> data = jsonDecode(response.body)['data']['kota'];
+
+  //     // for (var item in data) {
+  //     //   posisi.add(KotaModel.fromJson(item));
+  //     // }
+  //     print(data);
+  //     return data;
+  //   } else {
+  //     throw Exception('Gagal get Posisi');
+  //   }
+  // }
+
   getInit() async {
+    // getKota();
     getSession().then((value) {
       print(value);
       if (value != '') {

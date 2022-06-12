@@ -1,13 +1,24 @@
+import 'dart:convert';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:myintern/models/kota_model.dart';
+import 'package:myintern/models/pendidikan_model.dart';
+import 'package:myintern/models/prodi_model.dart';
+import 'package:myintern/models/skill_model.dart';
 import 'package:myintern/pages/widget/loading_button.dart';
 import 'package:myintern/providers/auth_providers.dart';
+import 'package:myintern/providers/informasi_providers.dart';
 import 'package:myintern/services/auth_service.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:myintern/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -17,8 +28,15 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  void initState() {
+    getInit();
+    super.initState();
+  }
+
   bool _isObscure = true;
   bool _isObscureVerif = true;
+  String? selected;
+  late List<String> arr;
   TextEditingController emailController = TextEditingController(text: '');
   TextEditingController passwordController = TextEditingController(text: '');
   TextEditingController alamatController = TextEditingController(text: '');
@@ -34,36 +52,160 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
+  // void initState() {
+  //   getInit();
+  //   super.initState();
+  // }
+
+  // getInit() async {
+  //   await Provider.of<PosisiProvider>(context, listen: false).getPosisi();
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  // }
+
+  getInit() async {
+    // arr = await getKota();
+    await Provider.of<InformasiProviders>(context, listen: false).getKota();
+    await Provider.of<InformasiProviders>(context, listen: false).getProdi();
+    await Provider.of<InformasiProviders>(context, listen: false).getSkill();
+    await Provider.of<InformasiProviders>(context, listen: false)
+        .getPendidikan();
+    setState(() {
+      initLoad = false;
+    });
+  }
+
+  Future<List<String>> getKota() async {
+    var urlKota = Uri.parse('http://portofoliome.my.id/api/kota/all');
+    var headers = {'Content-Type': 'application/json'};
+    var response = await http.get(urlKota, headers: headers);
+    // print(response);
+    if (response.statusCode == 200) {
+      List<String> data = jsonDecode(response.body)['data']['kota'];
+      // List<KotaModel> posisi = [];
+
+      // for (var item in data) {
+      //   posisi.add(KotaModel.fromJson(item));
+      // }
+      print(data);
+      arr = data;
+      return data;
+    } else {
+      throw Exception('Gagal get Posisi');
+    }
+  }
+
   bool isLoading = false;
+  bool initLoad = true;
+  List<String> data = ["a", "b", "c", "d", "e"];
+  dynamic _filecv;
+  late String path;
+  late String fn;
+  late int size;
+  late String kota;
+  late String pendidikan;
+  late String prod;
+  late String skill;
+  // late Map kota;
+
+  void _pickFileCV() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx']);
+    if (result != null) {
+      PlatformFile file = result.files.single;
+      setState(() {
+        _filecv = file.name;
+        path = file.path!;
+        fn = file.name;
+        size = file.size;
+        print(size);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenwidth = MediaQuery.of(context).size.width;
     AuthProvider ap = Provider.of<AuthProvider>(context);
+    InformasiProviders ip = Provider.of<InformasiProviders>(context);
+    // List<String> arr = ip.kotas.toList();
+    // print(ip.kotas.runtimeType);
+    List<KotaModel> km =
+        List<KotaModel>.from(ip.kotas.map((e) => KotaModel.fromJson(e)));
+    List<PendidikanModel> pm = List<PendidikanModel>.from(
+        ip.pendidikans.map((e) => PendidikanModel.fromJson(e)));
+    List<ProdiModel> prm =
+        List<ProdiModel>.from(ip.prodis.map((e) => ProdiModel.fromJson(e)));
+    List<SkillModel> sm =
+        List<SkillModel>.from(ip.skills.map((e) => SkillModel.fromJson(e)));
+    // print(prm);
     // ignore: unused_element
+
     handleSignUp() async {
-      setState(() {
-        isLoading = true;
-      });
-      if (await ap.register(
-          name: nameController.text,
-          email: emailController.text,
-          password: passwordController.text,
-          notlp_user: tlpController.text,
-          alamat_user: alamatController.text)) {
-        Navigator.popAndPushNamed(context, '/home');
-      } else {
+      if (nameController.text == '' ||
+          emailController.text == '' ||
+          passwordController.text == '' ||
+          tlpController.text == '' ||
+          alamatController.text == '' ||
+          fn == '' ||
+          kota == '' ||
+          pendidikan == '' ||
+          path == '' ||
+          prod == '' ||
+          skill == '') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: alertColor,
             content: Text(
-              "Registrasi Gagal",
+              "Tidak boleh Kosong",
               style: primaryTextStyle.copyWith(color: Colors.white),
             )));
+      } else if (size > 1500000) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: alertColor,
+            content: Text(
+              "Ukuran file tidak boleh lebih dari 1,5 MB",
+              style: primaryTextStyle.copyWith(color: Colors.white),
+            )));
+      } else {
+        setState(() {
+          isLoading = true;
+        });
+        if (await ap.register(
+            name: nameController.text,
+            email: emailController.text,
+            password: passwordController.text,
+            notlp_user: tlpController.text,
+            alamat_user: alamatController.text,
+            fn: fn,
+            kota_id: kota,
+            path: path,
+            pendidikan_id: pendidikan,
+            prodi_id: prod,
+            skill_id: skill)) {
+          print('kondisi berhasil');
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: bgGreen,
+              content: Text(
+                "Registrasi Berhasil",
+                style: primaryTextStyle.copyWith(color: Colors.white),
+              )));
+          Navigator.popAndPushNamed(context, '/signin');
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: alertColor,
+              content: Text(
+                "Registrasi Gagal, Email sudah terdaftar",
+                style: primaryTextStyle.copyWith(color: Colors.white),
+              )));
+        }
+        setState(() {
+          isLoading = false;
+        });
       }
-      setState(() {
-        isLoading = false;
-      });
     }
 
     Widget banner() {
@@ -101,6 +243,7 @@ class _SignUpPageState extends State<SignUpPage> {
               // height: containerh,
               child: Center(
                 child: TextFormField(
+                  autofocus: false,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: MultiValidator(
                     [
@@ -401,6 +544,269 @@ class _SignUpPageState extends State<SignUpPage> {
       );
     }
 
+    Widget kotaInput(double email, double input, double containerh,
+        double contentpadh, double contentpadw) {
+      return Container(
+        margin: EdgeInsets.only(
+            top: 11.h, left: defaultMargin, right: defaultMargin),
+        // color: primaryColor,
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Kota',
+              style: primaryTextStyle.copyWith(
+                  fontWeight: semibold, fontSize: email),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              height: containerh,
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Center(
+                child: DropdownSearch<KotaModel>(
+                  mode: Mode.DIALOG,
+                  // showSelectedItems: true,
+                  items: km,
+                  // onFind: (text) async {
+                  //   var urlKota =
+                  //       Uri.parse('http://portofoliome.my.id/api/kota/all');
+                  //   var headers = {'Content-Type': 'application/json'};
+                  //   var response = await http.get(urlKota, headers: headers);
+                  //   List data = (jsonDecode(response.body)
+                  //       as Map<String, dynamic>)['data']['kota'];
+                  //   List<KotaModel> kotaName = [];
+                  //   data.forEach((element) {
+                  //     kotaName.add(KotaModel(
+                  //         id: element['id'], nama_kota: element['nama_kota']));
+                  //   });
+                  //   return kotaName;
+                  // },
+                  // items: km,
+                  popupItemBuilder: (context, item, isSelected) => ListTile(
+                    title: Text(item.namaKota),
+                  ),
+                  showSearchBox: true,
+                  dropdownBuilder: (context, selectedItem) =>
+                      Text(selectedItem?.namaKota ?? 'Pilih Kota'),
+                  dropdownSearchDecoration: InputDecoration(
+                    hintText: "Pilih kota",
+                    // border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      kota = value!.id.toString();
+                    });
+                    print(kota);
+                  },
+                  // selectedItem: "Brazil",
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget PendidikanInput(double email, double input, double containerh,
+        double contentpadh, double contentpadw) {
+      return Container(
+        margin: EdgeInsets.only(
+            top: 11.h, left: defaultMargin, right: defaultMargin),
+        // color: primaryColor,
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Pendidikan',
+              style: primaryTextStyle.copyWith(
+                  fontWeight: semibold, fontSize: email),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              height: containerh,
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Center(
+                child: DropdownSearch<PendidikanModel>(
+                  mode: Mode.DIALOG,
+                  // showSelectedItems: true,
+                  items: pm,
+                  popupItemBuilder: (context, item, isSelected) => ListTile(
+                    title: Text(item.tingkatPendidikan),
+                  ),
+                  showSearchBox: true,
+                  dropdownBuilder: (context, selectedItem) => Text(
+                      selectedItem?.tingkatPendidikan ??
+                          'Pilih Pendidikan Terakhir'),
+                  dropdownSearchDecoration: InputDecoration(
+                    hintText: "Pilih Pendidikan Terakhir",
+
+                    // border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      pendidikan = value!.id.toString();
+                    });
+                    print(pendidikan);
+                  },
+                  // selectedItem: "Brazil",
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget ProdiInput(double email, double input, double containerh,
+        double contentpadh, double contentpadw) {
+      return Container(
+        margin: EdgeInsets.only(
+            top: 11.h, left: defaultMargin, right: defaultMargin),
+        // color: primaryColor,
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Program Studi',
+              style: primaryTextStyle.copyWith(
+                  fontWeight: semibold, fontSize: email),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              height: containerh,
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Center(
+                child: DropdownSearch<ProdiModel>(
+                  mode: Mode.DIALOG,
+                  // showSelectedItems: true,
+                  items: prm,
+                  popupItemBuilder: (context, item, isSelected) => ListTile(
+                    title: Text(item.namaProdi),
+                  ),
+                  showSearchBox: true,
+                  dropdownBuilder: (context, selectedItem) =>
+                      Text(selectedItem?.namaProdi ?? 'Pilih Program Studi'),
+                  dropdownSearchDecoration: InputDecoration(
+                    hintText: "Pilih Program Studi",
+
+                    // border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      prod = value!.id.toString();
+                    });
+                    print(prod);
+                  },
+                  // selectedItem: "Brazil",
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget SkillInput(double email, double input, double containerh,
+        double contentpadh, double contentpadw) {
+      return Container(
+        margin: EdgeInsets.only(
+            top: 11.h, left: defaultMargin, right: defaultMargin),
+        // color: primaryColor,
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Skill',
+              style: primaryTextStyle.copyWith(
+                  fontWeight: semibold, fontSize: email),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              height: containerh,
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Center(
+                child: DropdownSearch<SkillModel>(
+                  mode: Mode.DIALOG,
+                  // showSelectedItems: true,
+                  items: sm,
+                  popupItemBuilder: (context, item, isSelected) => ListTile(
+                    title: Text(item.namaSkill),
+                  ),
+                  showSearchBox: true,
+                  dropdownBuilder: (context, selectedItem) =>
+                      Text(selectedItem?.namaSkill ?? 'Pilih Skill'),
+                  dropdownSearchDecoration: InputDecoration(
+                    hintText: "Pilih Skill",
+
+                    // border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      skill = value!.id.toString();
+                    });
+                    print(skill);
+                  },
+                  // selectedItem: "Brazil",
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget title(double fs, margintop, String text) {
+      return Container(
+        margin: EdgeInsets.fromLTRB(defaultMargin, margintop, defaultMargin, 0),
+        child: Text(
+          text,
+          style: primaryTextStyle.copyWith(fontWeight: semibold, fontSize: fs),
+        ),
+      );
+    }
+
+    Widget upCv(
+      double containerh,
+      double margintop,
+      double txt,
+    ) {
+      return Container(
+          height: containerh,
+          margin:
+              EdgeInsets.fromLTRB(defaultMargin, margintop, defaultMargin, 0),
+          child: RaisedButton(
+            color: Colors.white,
+            elevation: 0,
+            onPressed: () {
+              _pickFileCV();
+            },
+            shape: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+            // RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            textColor: Colors.black,
+            child: Text(
+              _filecv == null ? 'Upload CV' : _filecv,
+              style: primaryTextStyle.copyWith(
+                  color: Colors.black54, fontSize: txt),
+            ),
+          ));
+    }
+
     Widget btnlogin(
       double containerh,
       double margintop,
@@ -416,7 +822,7 @@ class _SignUpPageState extends State<SignUpPage> {
             elevation: 0,
             onPressed: () {
               handleSignUp();
-              // Navigator.pushNamed(context, '/home');
+              // Navigator.pushNamed(context, '/daftar');
             },
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -457,36 +863,54 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
         body: ColorfulSafeArea(
             color: primaryColor,
-            child: (MediaQuery.of(context).orientation == Orientation.portrait)
-                ? Form(
-                    key: formkey,
-                    child: ListView(
-                      children: [
-                        banner(),
-                        emailInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                        passInput(18.sp, 38.h, 10.w, 15.h, 20.sp, 14.sp),
-                        passInputVerif(18.sp, 38.h, 10.w, 15.h, 20.sp, 14.sp),
-                        nameInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                        tlpInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                        alamatInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                        isLoading
-                            ? LoadingButton()
-                            : btnlogin(38.h, 21.h, 18.sp),
-                        text(12.sp, 12.sp),
-                      ],
+            child: (initLoad == true)
+                ? Container(
+                    child: SpinKitRing(
+                      color: Colors.blue,
+                      size: 50.0,
                     ),
                   )
-                : ListView(
-                    children: [
-                      banner(),
-                      emailInput(18, 14, 38, 15, 10),
-                      passInput(18, 38, 10, 15, 20, 14),
-                      passInputVerif(18, 38, 10, 15, 20, 14),
-                      nameInput(18, 14, 38, 15, 10),
-                      tlpInput(18, 14, 38, 15, 10),
-                      btnlogin(38, 21, 18),
-                      text(12, 12),
-                    ],
-                  )));
+                : (MediaQuery.of(context).orientation == Orientation.portrait)
+                    ? Form(
+                        key: formkey,
+                        child: ListView(
+                          children: [
+                            banner(),
+                            emailInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                            passInput(18.sp, 38.h, 10.w, 15.h, 20.sp, 14.sp),
+                            passInputVerif(
+                                18.sp, 38.h, 10.w, 15.h, 20.sp, 14.sp),
+                            nameInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                            tlpInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                            alamatInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                            kotaInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                            PendidikanInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                            ProdiInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                            SkillInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                            title(18.sp, 15.h, 'Upload CV'),
+                            upCv(38.h, 0, 14.sp),
+                            isLoading
+                                ? LoadingButton()
+                                : btnlogin(38.h, 21.h, 18.sp),
+                            text(12.sp, 12.sp),
+                          ],
+                        ),
+                      )
+                    : ListView(
+                        children: [
+                          banner(),
+                          emailInput(18, 14, 38, 15, 10),
+                          passInput(18, 38, 10, 15, 20, 14),
+                          passInputVerif(18, 38, 10, 15, 20, 14),
+                          nameInput(18, 14, 38, 15, 10),
+                          tlpInput(18, 14, 38, 15, 10),
+                          btnlogin(38, 21, 18),
+                          text(12, 12),
+                        ],
+                      )));
   }
 }
+
+class Width {}
+
+class Srting {}
