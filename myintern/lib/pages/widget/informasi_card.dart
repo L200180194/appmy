@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:myintern/models/pendaftaran_model.dart';
 import 'package:myintern/models/posisi_model.dart';
+import 'package:myintern/pages/home/detail_informasi_page.dart';
 import 'package:myintern/pages/home/detail_page.dart';
 import 'package:myintern/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PosisiCard extends StatelessWidget {
-  // const PosisiCard({Key? key}) : super(key: key);
-  final PosisiModel posisi;
-  PosisiCard(this.posisi);
+class InformasiCard extends StatelessWidget {
+  // const InformasiCard({Key? key}) : super(key: key);
+  final PendaftaranModel informasi;
+  InformasiCard(this.informasi);
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,8 @@ class PosisiCard extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DetailPage(
-                          posisi: posisi,
+                    builder: (context) => DetailInformasiPage(
+                          daftar: informasi,
                         )));
           },
           child: Container(
@@ -62,7 +64,7 @@ class PosisiCard extends StatelessWidget {
                                 spreadRadius: 3),
                           ]),
                       child: Image.network(
-                          'http://portofoliome.my.id/storage/${posisi.foto_posisi}'),
+                          'http://portofoliome.my.id/storage/${informasi.fotoPosisi}'),
                     ),
                     Container(
                       height: 50.h,
@@ -73,7 +75,7 @@ class PosisiCard extends StatelessWidget {
                           SizedBox(
                             width: 220.w,
                             child: Text(
-                              '${posisi.nama_posisi}',
+                              '${informasi.namaPosisi}',
                               overflow: TextOverflow.ellipsis,
                               softWrap: false,
                               style: primaryTextStyle.copyWith(
@@ -85,7 +87,7 @@ class PosisiCard extends StatelessWidget {
                             child: SizedBox(
                               width: 210.w,
                               child: Text(
-                                "${posisi.perusahaan!.nama_perusahaan}",
+                                "${informasi.namaPerusahaan}",
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: false,
@@ -109,7 +111,7 @@ class PosisiCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             color: blueclipColor),
                         child: Text(
-                          '${posisi.perusahaan!.alamat_perusahaan}',
+                          '${informasi.alamatPerusahaan}',
                           style: primaryTextStyle.copyWith(fontSize: 5.sp),
                         )),
                     // Container(
@@ -130,7 +132,7 @@ class PosisiCard extends StatelessWidget {
                             margin: EdgeInsets.only(right: 20.w),
                             alignment: Alignment.centerRight,
                             child: Text(
-                              '${posisi.deadline_posisi}',
+                              '${informasi.deadlinePosisi}',
                               style: primaryTextStyle.copyWith(fontSize: 12.sp),
                             )))
                   ],

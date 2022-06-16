@@ -30,6 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String skill = '';
   String prodi = '';
   String kota = '';
+  String fotoCheck = '';
   String pendidikan = '';
   void initState() {
     getSession();
@@ -58,6 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       name = sp.getString('name').toString();
       alamat = sp.getString('alamat').toString();
+      fotoCheck = sp.getString('foto').toString();
       foto =
           'http://portofoliome.my.id/storage/${sp.getString('foto').toString()}';
       cv = sp.getString('cv').toString();
@@ -94,6 +96,12 @@ class _ProfilePageState extends State<ProfilePage> {
     handleLogout() async {
       if (await ap.logout(token: token)) {
         print('berhasil Logout');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: bgGreen,
+            content: Text(
+              "Berhasil Keluar",
+              style: primaryTextStyle.copyWith(color: Colors.white),
+            )));
         Navigator.popAndPushNamed(context, '/signin');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -142,7 +150,22 @@ class _ProfilePageState extends State<ProfilePage> {
                         blurRadius: 7.0,
                         spreadRadius: 3),
                   ]),
-              child: Image.network(foto),
+              child: fotoCheck == ''
+                  ? Image.asset(
+                      'assets/userf.png',
+                      fit: BoxFit.contain,
+                    )
+                  : Image.network(
+                      foto,
+                      loadingBuilder: (context, child, progress) =>
+                          progress == null
+                              ? child
+                              : Container(
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                ),
+                    ),
             ),
             Text(
               name,
@@ -453,7 +476,35 @@ class _ProfilePageState extends State<ProfilePage> {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             textColor: Colors.white,
             child: Text(
-              'Edit',
+              'Edit Profile',
+              style:
+                  primaryTextStyle.copyWith(color: Colors.white, fontSize: txt),
+            ),
+          ));
+    }
+
+    Widget btnEditpass(
+      double containerh,
+      double margintop,
+      double marginbtm,
+      double txt,
+    ) {
+      return Container(
+          height: containerh,
+          margin:
+              EdgeInsets.fromLTRB(defaultMargin, 0, defaultMargin, marginbtm),
+          child: RaisedButton(
+            color: primaryColor,
+            elevation: 0,
+            onPressed: () {
+              // Navigator.pushNamed(context, '/daftar');
+              Navigator.pushNamed(context, '/gantipassword');
+            },
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            textColor: Colors.white,
+            child: Text(
+              'Ganti Password',
               style:
                   primaryTextStyle.copyWith(color: Colors.white, fontSize: txt),
             ),
@@ -504,6 +555,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   PendTer(),
                   Akun(),
                   btnEdit(38.h, 21.h, 16.sp, 18.sp),
+                  btnEditpass(38.h, 21.h, 16.sp, 18.sp),
                   btnKeluar(38.h, 0, 16.sp, 18.sp),
                 ],
               )

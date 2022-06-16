@@ -8,7 +8,7 @@ class LoadingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        // height: containerh,
+        height: 38.h,
         margin: EdgeInsets.fromLTRB(defaultMargin, 21.h, defaultMargin, 0),
         child: RaisedButton(
           color: primaryColor,

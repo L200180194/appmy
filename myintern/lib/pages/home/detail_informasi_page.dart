@@ -1,14 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:myintern/models/pendaftaran_model.dart';
 import 'package:myintern/pages/widget/posisi_card.dart';
 import 'package:myintern/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myintern/pages/widget/posisi_cardlandscape.dart';
 
-class DetailInformasiPage extends StatelessWidget {
-  const DetailInformasiPage({Key? key}) : super(key: key);
+class DetailInformasiPage extends StatefulWidget {
+  final PendaftaranModel daftar;
+  const DetailInformasiPage({Key? key, required this.daftar}) : super(key: key);
+
+  @override
+  _DetailInformasiPageState createState() => _DetailInformasiPageState();
+}
+
+class _DetailInformasiPageState extends State<DetailInformasiPage> {
+  void initState() {
+    getColor();
+    super.initState();
+  }
+
+  late Color clr;
+  getColor() async {
+    if (widget.daftar.statusDaftar == 'Proses') {
+      clr = processColor;
+    } else if (widget.daftar.statusDaftar == 'Diterima') {
+      clr = bgGreen;
+    } else if (widget.daftar.statusDaftar == 'Ditolak') {
+      clr = alertColor;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    // Color clr;
+
     Widget banner() {
       return Container(
           height: 28.h,
@@ -73,11 +98,12 @@ class DetailInformasiPage extends StatelessWidget {
                         blurRadius: 7.0,
                         spreadRadius: 3),
                   ]),
-              child: Image.asset('assets/tokopedia.png'),
+              child: Image.network(
+                  'http://portofoliome.my.id/storage/${widget.daftar.fotoPosisi}'),
             ),
             Center(
               child: Text(
-                'BACKEND PROGRAMMER ',
+                '${widget.daftar.namaPosisi} ',
                 textAlign: TextAlign.center,
                 style: primaryTextStyle.copyWith(
                     fontSize: 18.sp, fontWeight: bold),
@@ -88,7 +114,7 @@ class DetailInformasiPage extends StatelessWidget {
             ),
             Center(
               child: Text(
-                'Jakarta Pusat',
+                '${widget.daftar.alamatPerusahaan}',
                 textAlign: TextAlign.center,
                 style: primaryTextStyle.copyWith(
                     fontSize: 12.sp, fontWeight: regular),
@@ -129,7 +155,7 @@ class DetailInformasiPage extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Text(
-                  'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum id numquam aspernatur, ullam corporis minus autem eum et facere accusamus nam magnam delectus asperiores eligendi eius nulla aut? Atque, ducimus! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum id numquam aspernatur, ullam corporis minus autem eum et facere accusamus nam magnam delectus asperiores eligendi eius nulla aut? Atque, ducimus! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum id numquam aspernatur, ullam corporis minus autem eum et facer ;lasdj;flsjpgjdsopfjvopjfvoisvoinsfvoihfsoivnhsdoihvoidsvoidshvoidsvohdsoivhfoidhfoidhiofdhoifhodhfiodhfoidhoifdhoifndkl',
+                  '${widget.daftar.keteranganDaftar}',
                   style: primaryTextStyle,
                 ),
               ),
@@ -138,7 +164,7 @@ class DetailInformasiPage extends StatelessWidget {
               margin: EdgeInsets.only(top: defaultMargin),
               padding: EdgeInsets.all(5.sp),
               decoration: BoxDecoration(
-                  color: alertColor,
+                  color: clr,
                   border: Border.all(color: Colors.black12),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
@@ -149,7 +175,7 @@ class DetailInformasiPage extends StatelessWidget {
                         spreadRadius: 3),
                   ]),
               child: Text(
-                'Ditolak',
+                '${widget.daftar.statusDaftar}',
                 style: primaryTextStyle.copyWith(
                     color: Colors.white, fontSize: 18.sp),
               ),

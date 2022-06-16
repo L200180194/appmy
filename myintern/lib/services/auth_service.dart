@@ -131,29 +131,34 @@ class AuthService {
       UserModel user = UserModel.fromJson(data['user']);
       user.token = 'Bearer ' + data['access_token'];
       setToken(data['access_token']);
-      print(data['access_token']);
-      if (data['user']['foto_user'] == null ||
-          data['user']['foto_user'] == '') {
-        print('null');
-      } else {
-        print('tidak null');
-      }
+      // print(data['access_token']);
 
+      // String foto_user = data['user']['foto_user'];
+      // print(foto_user);
       // print(data['user']['name']);
       final sp = await SharedPreferences.getInstance();
       sp.setInt('id', data['user']['id']);
       sp.setString("name", data['user']['name'].toString());
       sp.setString("alamat", data['user']['alamat_user']);
-      sp.setString("foto", data['user']['foto_user']);
+      if (data['user']['foto_user'] == null ||
+          data['user']['foto_user'] == '') {
+        sp.setString("foto", '');
+      } else {
+        sp.setString("foto", data['user']['foto_user']);
+      }
       sp.setString("cv", data['user']['cv_user']);
       sp.setString("notlp", data['user']['notlp_user']);
       sp.setString('email', data['user']['email']);
       sp.setString('token', data['access_token']);
       sp.setString('skill', data['user']['skill']['nama_skill']);
+      sp.setInt('skill_id', data['user']['skill']['id']);
       sp.setString('prodi', data['user']['prodi']['nama_prodi']);
+      sp.setInt('prodi_id', data['user']['prodi']['id']);
       sp.setString('kota', data['user']['kota']['nama_kota']);
+      sp.setInt('kota_id', data['user']['kota']['id']);
       sp.setString(
           'pendidikan', data['user']['pendidikan']['tingkat_pendidikan']);
+      sp.setInt('pendidikan_id', data['user']['pendidikan']['id']);
       var em = sp.getString('name');
 
       print(em);

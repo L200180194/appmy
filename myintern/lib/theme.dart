@@ -9,6 +9,7 @@ Color blueclipColor = Color(0xffCFDCF0);
 Color alertColor = Color(0xffEB1F2B);
 Color secondaryTextColor = Color(0xff82868B);
 Color primaryTextColor = Color(0xff050D18);
+Color processColor = Color(0xffEBA41F);
 Color bgGreen = Color(0xff04BB00);
 
 TextStyle primaryTextStyle = GoogleFonts.montserrat(color: primaryTextColor);

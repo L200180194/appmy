@@ -1,7 +1,21 @@
 import 'package:colorful_safe_area/colorful_safe_area.dart';
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+import 'package:myintern/models/kota_model.dart';
+import 'package:myintern/models/pendidikan_model.dart';
+import 'package:myintern/models/prodi_model.dart';
+import 'package:myintern/models/skill_model.dart';
+import 'package:myintern/pages/widget/loading_button.dart';
+import 'package:myintern/providers/informasi_providers.dart';
+import 'package:myintern/providers/profile_provider.dart';
 import 'package:myintern/theme.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfilPage extends StatefulWidget {
   const EditProfilPage({Key? key}) : super(key: key);
@@ -11,10 +25,170 @@ class EditProfilPage extends StatefulWidget {
 }
 
 class _EditProfilPageState extends State<EditProfilPage> {
-  bool _isObscure = true;
-  bool _isObscureVerif = true;
+  void initState() {
+    getInit();
+    getSession();
+    super.initState();
+  }
+
+  bool isLoading = false;
+  bool initLoad = true;
+  dynamic _filecv;
+  late String name;
+  late int id;
+  late String alamat;
+  late String foto;
+  late String cv;
+  late String notlp;
+  late String email;
+  late String token;
+  late String fotoCheck;
+  String path = '';
+  String fn = '';
+  late int size;
+  late String kota;
+  late String kota_id;
+  late String pendidikan;
+  late String pendidikan_id;
+  late String prod;
+  late String prod_id;
+  late String skill;
+  late String skill_id;
+  TextEditingController alamatController = TextEditingController(text: '');
+  TextEditingController nameController = TextEditingController(text: '');
+  TextEditingController tlpController = TextEditingController(text: '');
+  void _pickFileCV() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['pdf']);
+    if (result != null) {
+      PlatformFile file = result.files.single;
+      setState(() {
+        _filecv = file.name;
+        path = file.path!;
+        fn = file.name;
+        size = file.size;
+        print(size);
+      });
+    }
+  }
+
+  getInit() async {
+    // arr = await getKota();
+    await Provider.of<InformasiProviders>(context, listen: false).getKota();
+    await Provider.of<InformasiProviders>(context, listen: false).getProdi();
+    await Provider.of<InformasiProviders>(context, listen: false).getSkill();
+    await Provider.of<InformasiProviders>(context, listen: false)
+        .getPendidikan();
+    setState(() {
+      // initLoad = false;
+    });
+  }
+
+  Future<String> getSession() async {
+    final sp = await SharedPreferences.getInstance();
+    setState(() {
+      name = sp.getString('name').toString();
+      alamat = sp.getString('alamat').toString();
+      cv = sp.getString('cv').toString();
+      fotoCheck = sp.getString('foto').toString();
+      foto =
+          'http://portofoliome.my.id/storage/${sp.getString('foto').toString()}';
+      notlp = sp.getString('notlp').toString();
+      email = sp.getString('email').toString();
+      token = sp.getString('token').toString();
+      skill = sp.getString('skill').toString();
+      skill_id = sp.getInt('skill_id').toString();
+      prod = sp.getString('prodi').toString();
+      prod_id = sp.getInt('prodi_id').toString();
+      kota = sp.getString('kota').toString();
+      kota_id = sp.getInt('kota_id').toString();
+      pendidikan = sp.getString('pendidikan').toString();
+      pendidikan_id = sp.getInt('pendidikan_id').toString();
+      id = sp.getInt('id')!.toInt();
+      initLoad = false;
+      alamatController.text = alamat;
+      nameController.text = name;
+      tlpController.text = notlp;
+      // print(name);
+    });
+    print(prod_id);
+    return name;
+  }
+
   @override
   Widget build(BuildContext context) {
+    ProfileProvider pp = Provider.of(context);
+    handeleditProfile() async {
+      if (nameController.text == '' ||
+          tlpController.text == '' ||
+          alamatController.text == '' ||
+          kota_id == '' ||
+          pendidikan_id == '' ||
+          prod_id == '' ||
+          skill_id == '') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: alertColor,
+            content: Text(
+              "Tidak boleh Kosong",
+              style: primaryTextStyle.copyWith(color: Colors.white),
+            )));
+      } else {
+        setState(() {
+          isLoading = true;
+        });
+        if (await pp.updateProfile(
+            name: nameController.text,
+            notlp_user: tlpController.text,
+            alamat_user: alamatController.text,
+            fn: fn,
+            kota_id: kota_id,
+            path: path,
+            pendidikan_id: pendidikan_id,
+            token: token,
+            prodi_id: prod_id,
+            skill_id: skill_id)) {
+          print('kondisi berhasil');
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: bgGreen,
+              content: Text(
+                "Update Berhasil",
+                style: primaryTextStyle.copyWith(color: Colors.white),
+              )));
+          Navigator.popAndPushNamed(context, '/home');
+        } else if (size > 1500000) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: alertColor,
+              content: Text(
+                "Ukuran file tidak boleh lebih dari 1,5 MB",
+                style: primaryTextStyle.copyWith(color: Colors.white),
+              )));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: alertColor,
+              content: Text(
+                "Update Gagal",
+                style: primaryTextStyle.copyWith(color: Colors.white),
+              )));
+        }
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+
+    InformasiProviders ip = Provider.of<InformasiProviders>(context);
+    // List<String> arr = ip.kotas.toList();
+    // print(ip.kotas.runtimeType);
+    List<KotaModel> km =
+        List<KotaModel>.from(ip.kotas.map((e) => KotaModel.fromJson(e)));
+    List<PendidikanModel> pm = List<PendidikanModel>.from(
+        ip.pendidikans.map((e) => PendidikanModel.fromJson(e)));
+    List<ProdiModel> prm =
+        List<ProdiModel>.from(ip.prodis.map((e) => ProdiModel.fromJson(e)));
+    List<SkillModel> sm =
+        List<SkillModel>.from(ip.skills.map((e) => SkillModel.fromJson(e)));
     Widget header() {
       return Container(
         margin: EdgeInsets.only(bottom: defaultMargin),
@@ -63,27 +237,58 @@ class _EditProfilPageState extends State<EditProfilPage> {
                 Expanded(flex: 2, child: Container())
               ],
             ),
-            Container(
-              height: 100.h,
-              width: 100.h,
-              margin: EdgeInsets.fromLTRB(9, 9, 15, 16),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black12),
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        offset: Offset(0.0, 0.0), //(x,y)
-                        blurRadius: 7.0,
-                        spreadRadius: 3),
-                  ]),
-              child: Image.asset('assets/tokopedia.png'),
+            Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                Container(
+                  height: 100.h,
+                  width: 100.h,
+                  margin: EdgeInsets.fromLTRB(9, 9, 15, 16),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.black12),
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            offset: Offset(0.0, 0.0), //(x,y)
+                            blurRadius: 7.0,
+                            spreadRadius: 3),
+                      ]),
+                  child: fotoCheck == ''
+                      ? Image.asset(
+                          'assets/userf.png',
+                          fit: BoxFit.contain,
+                        )
+                      : Image.network(
+                          foto,
+                          loadingBuilder: (context, child, progress) =>
+                              progress == null
+                                  ? child
+                                  : Container(
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    ),
+                        ),
+                ),
+                Container(
+                  decoration: ShapeDecoration(
+                    color: Colors.white,
+                    shape: CircleBorder(),
+                  ),
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/editfoto');
+                      },
+                      icon: Icon(Icons.edit)),
+                )
+              ],
             ),
             Container(
               margin: EdgeInsets.only(bottom: 10.h),
               child: Text(
-                'Alfianto Andy P',
+                'Update Profile',
                 style: primaryTextStyle.copyWith(
                     color: Colors.white, fontSize: 18.sp, fontWeight: bold),
               ),
@@ -97,26 +302,33 @@ class _EditProfilPageState extends State<EditProfilPage> {
         double contentpadh, double contentpadw) {
       return Container(
         margin: EdgeInsets.only(
-            top: 1.h, left: defaultMargin, right: defaultMargin),
+            top: 11.h, left: defaultMargin, right: defaultMargin),
         // color: primaryColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Alamat',
+              'Nama',
               style: primaryTextStyle.copyWith(
                   fontWeight: semibold, fontSize: email),
             ),
             Container(
-              height: containerh,
+              // height: containerh,
               child: Center(
                 child: TextFormField(
+                  // initialValue: 'aaaaa',
+                  controller: nameController,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator:
+                      RequiredValidator(errorText: "Tidak Boleh Kosong "),
                   decoration: InputDecoration(
                     hintText: 'MyIntern',
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                       color: Colors.black,
                     )),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: primaryColor, width: 2)),
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: primaryColor, width: 2)),
                     errorBorder: OutlineInputBorder(
@@ -148,16 +360,23 @@ class _EditProfilPageState extends State<EditProfilPage> {
                   fontWeight: semibold, fontSize: email),
             ),
             Container(
-              height: containerh,
+              // height: containerh,
               child: Center(
                 child: TextFormField(
+                  controller: tlpController,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator:
+                      RequiredValidator(errorText: "Tidak Boleh Kosong "),
                   keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   decoration: InputDecoration(
                     hintText: '1234567890',
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                       color: Colors.black,
                     )),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: primaryColor, width: 2)),
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: primaryColor, width: 2)),
                     errorBorder: OutlineInputBorder(
@@ -184,20 +403,26 @@ class _EditProfilPageState extends State<EditProfilPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Nama',
+              'Alamat',
               style: primaryTextStyle.copyWith(
                   fontWeight: semibold, fontSize: email),
             ),
             Container(
-              height: containerh,
+              // height: containerh,
               child: Center(
                 child: TextFormField(
+                  controller: alamatController,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator:
+                      RequiredValidator(errorText: "Tidak Boleh Kosong "),
                   decoration: InputDecoration(
-                    hintText: 'MyIntern',
+                    hintText: ' Jl. MyIntern',
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                       color: Colors.black,
                     )),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: primaryColor, width: 2)),
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: primaryColor, width: 2)),
                     errorBorder: OutlineInputBorder(
@@ -220,6 +445,7 @@ class _EditProfilPageState extends State<EditProfilPage> {
         margin: EdgeInsets.only(
             top: 11.h, left: defaultMargin, right: defaultMargin),
         // color: primaryColor,
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -229,23 +455,103 @@ class _EditProfilPageState extends State<EditProfilPage> {
                   fontWeight: semibold, fontSize: email),
             ),
             Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
               height: containerh,
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(5),
+              ),
               child: Center(
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'Web Programming',
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: Colors.black,
-                    )),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: primaryColor, width: 2)),
-                    errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2)),
-                    contentPadding: EdgeInsets.symmetric(
-                        horizontal: contentpadw, vertical: contentpadh),
+                child: DropdownSearch<SkillModel>(
+                  mode: Mode.DIALOG,
+                  // showSelectedItems: true,
+                  items: sm,
+                  popupItemBuilder: (context, item, isSelected) => ListTile(
+                    title: Text(item.namaSkill),
                   ),
-                  style: primaryTextStyle.copyWith(fontSize: input),
+                  showSearchBox: true,
+                  dropdownBuilder: (context, selectedItem) =>
+                      Text(selectedItem?.namaSkill ?? skill),
+                  dropdownSearchDecoration: InputDecoration(
+                    hintText: "Pilih Skill",
+
+                    // border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      skill_id = value!.id.toString();
+                    });
+                    print(skill_id);
+                  },
+                  // selectedItem: "Brazil",
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget kotaInput(double email, double input, double containerh,
+        double contentpadh, double contentpadw) {
+      return Container(
+        margin: EdgeInsets.only(
+            top: 11.h, left: defaultMargin, right: defaultMargin),
+        // color: primaryColor,
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Kota',
+              style: primaryTextStyle.copyWith(
+                  fontWeight: semibold, fontSize: email),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              height: containerh,
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Center(
+                child: DropdownSearch<KotaModel>(
+                  // selectedItem: ,
+                  mode: Mode.DIALOG,
+                  // showSelectedItems: true,
+                  items: km,
+                  // onFind: (text) async {
+                  //   var urlKota =
+                  //       Uri.parse('http://portofoliome.my.id/api/kota/all');
+                  //   var headers = {'Content-Type': 'application/json'};
+                  //   var response = await http.get(urlKota, headers: headers);
+                  //   List data = (jsonDecode(response.body)
+                  //       as Map<String, dynamic>)['data']['kota'];
+                  //   List<KotaModel> kotaName = [];
+                  //   data.forEach((element) {
+                  //     kotaName.add(KotaModel(
+                  //         id: element['id'], nama_kota: element['nama_kota']));
+                  //   });
+                  //   return kotaName;
+                  // },
+                  // items: km,
+                  popupItemBuilder: (context, item, isSelected) => ListTile(
+                    title: Text(item.namaKota),
+                  ),
+                  showSearchBox: true,
+                  dropdownBuilder: (context, selectedItem) =>
+                      Text(selectedItem?.namaKota ?? kota),
+                  dropdownSearchDecoration: InputDecoration(
+                    hintText: "Pilih kota",
+                    // border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      kota_id = value!.id.toString();
+                    });
+                    print(kota_id);
+                  },
+                  // selectedItem: "Brazil",
                 ),
               ),
             )
@@ -260,6 +566,7 @@ class _EditProfilPageState extends State<EditProfilPage> {
         margin: EdgeInsets.only(
             top: 11.h, left: defaultMargin, right: defaultMargin),
         // color: primaryColor,
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -269,23 +576,35 @@ class _EditProfilPageState extends State<EditProfilPage> {
                   fontWeight: semibold, fontSize: email),
             ),
             Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
               height: containerh,
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(5),
+              ),
               child: Center(
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'Universitas MyIntern',
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: Colors.black,
-                    )),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: primaryColor, width: 2)),
-                    errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2)),
-                    contentPadding: EdgeInsets.symmetric(
-                        horizontal: contentpadw, vertical: contentpadh),
+                child: DropdownSearch<PendidikanModel>(
+                  mode: Mode.DIALOG,
+                  // showSelectedItems: true,
+                  items: pm,
+                  popupItemBuilder: (context, item, isSelected) => ListTile(
+                    title: Text(item.tingkatPendidikan),
                   ),
-                  style: primaryTextStyle.copyWith(fontSize: input),
+                  showSearchBox: true,
+                  dropdownBuilder: (context, selectedItem) =>
+                      Text(selectedItem?.tingkatPendidikan ?? pendidikan),
+                  dropdownSearchDecoration: InputDecoration(
+                    hintText: "Pilih Pendidikan Terakhir",
+
+                    // border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      pendidikan_id = value!.id.toString();
+                    });
+                    print(pendidikan_id);
+                  },
+                  // selectedItem: "Brazil",
                 ),
               ),
             )
@@ -300,73 +619,45 @@ class _EditProfilPageState extends State<EditProfilPage> {
         margin: EdgeInsets.only(
             top: 11.h, left: defaultMargin, right: defaultMargin),
         // color: primaryColor,
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Prodi',
+              'Program Studi',
               style: primaryTextStyle.copyWith(
                   fontWeight: semibold, fontSize: email),
             ),
             Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
               height: containerh,
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(5),
+              ),
               child: Center(
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'Informatika',
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: Colors.black,
-                    )),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: primaryColor, width: 2)),
-                    errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2)),
-                    contentPadding: EdgeInsets.symmetric(
-                        horizontal: contentpadw, vertical: contentpadh),
+                child: DropdownSearch<ProdiModel>(
+                  mode: Mode.DIALOG,
+                  // showSelectedItems: true,
+                  items: prm,
+                  popupItemBuilder: (context, item, isSelected) => ListTile(
+                    title: Text(item.namaProdi),
                   ),
-                  style: primaryTextStyle.copyWith(fontSize: input),
-                ),
-              ),
-            )
-          ],
-        ),
-      );
-    }
+                  showSearchBox: true,
+                  dropdownBuilder: (context, selectedItem) =>
+                      Text(selectedItem?.namaProdi ?? prod),
+                  dropdownSearchDecoration: InputDecoration(
+                    hintText: "Pilih Program Studi",
 
-    Widget emailInput(double email, double input, double containerh,
-        double contentpadh, double contentpadw) {
-      return Container(
-        margin: EdgeInsets.only(
-            top: 11.h, left: defaultMargin, right: defaultMargin),
-        // color: primaryColor,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Email',
-              style: primaryTextStyle.copyWith(
-                  fontWeight: semibold, fontSize: email),
-            ),
-            Container(
-              height: containerh,
-              child: Center(
-                child: TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    hintText: 'example.gmail.com',
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: Colors.black,
-                    )),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: primaryColor, width: 2)),
-                    errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2)),
-                    contentPadding: EdgeInsets.symmetric(
-                        horizontal: contentpadw, vertical: contentpadh),
+                    // border: OutlineInputBorder(),
                   ),
-                  style: primaryTextStyle.copyWith(fontSize: input),
+                  onChanged: (value) {
+                    setState(() {
+                      prod_id = value!.id.toString();
+                    });
+                    print(prod_id);
+                  },
+                  // selectedItem: "Brazil",
                 ),
               ),
             )
@@ -375,107 +666,40 @@ class _EditProfilPageState extends State<EditProfilPage> {
       );
     }
 
-    Widget passInput(double txt, double containerh, double paddingw,
-        double paddingh, double iconsize, double hintsize) {
+    Widget title(double fs, margintop, String text) {
       return Container(
-        margin: EdgeInsets.only(
-            top: 11.h, left: defaultMargin, right: defaultMargin),
-        // color: primaryColor,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Password',
-              style: primaryTextStyle.copyWith(
-                  fontWeight: semibold, fontSize: txt),
-            ),
-            Container(
-              height: containerh,
-              child: TextFormField(
-                obscureText: _isObscure,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                    color: Colors.black,
-                  )),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: primaryColor, width: 2)),
-                  errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red, width: 2)),
-                  contentPadding: EdgeInsets.symmetric(
-                      horizontal: paddingw, vertical: paddingh),
-                  suffixIcon: IconButton(
-                      iconSize: iconsize,
-                      icon: Icon(
-                          _isObscure ? Icons.visibility_off : Icons.visibility),
-                      color: _isObscure ? Colors.grey : primaryColor,
-                      onPressed: () {
-                        setState(() {
-                          _isObscure = !_isObscure;
-                        });
-                      }),
-                  hintText: 'your password',
-                ),
-                style: primaryTextStyle.copyWith(fontSize: hintsize),
-              ),
-            )
-          ],
+        margin: EdgeInsets.fromLTRB(defaultMargin, margintop, defaultMargin, 0),
+        child: Text(
+          text,
+          style: primaryTextStyle.copyWith(fontWeight: semibold, fontSize: fs),
         ),
       );
     }
 
-    Widget passInputVerif(double txt, double containerh, double paddingw,
-        double paddingh, double iconsize, double hintsize) {
+    Widget upCv(
+      double containerh,
+      double margintop,
+      double txt,
+    ) {
       return Container(
-        margin: EdgeInsets.only(
-            top: 11.h, left: defaultMargin, right: defaultMargin),
-        // color: primaryColor,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Ulangi Password',
+          height: containerh,
+          margin:
+              EdgeInsets.fromLTRB(defaultMargin, margintop, defaultMargin, 0),
+          child: RaisedButton(
+            color: Colors.white,
+            elevation: 0,
+            onPressed: () {
+              _pickFileCV();
+            },
+            shape: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+            // RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            textColor: Colors.black,
+            child: Text(
+              _filecv == null ? 'Upload CV' : _filecv,
               style: primaryTextStyle.copyWith(
-                  fontWeight: semibold, fontSize: txt),
+                  color: Colors.black54, fontSize: txt),
             ),
-            Container(
-              height: containerh,
-              child: TextFormField(
-                obscureText: _isObscureVerif,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                    color: Colors.black,
-                  )),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: primaryColor, width: 2)),
-                  errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red, width: 2)),
-                  contentPadding: EdgeInsets.symmetric(
-                      horizontal: paddingw, vertical: paddingh),
-                  suffixIcon: IconButton(
-                      iconSize: iconsize,
-                      icon: Icon(_isObscureVerif
-                          ? Icons.visibility_off
-                          : Icons.visibility),
-                      color: _isObscureVerif ? Colors.grey : primaryColor,
-                      onPressed: () {
-                        setState(() {
-                          _isObscureVerif = !_isObscureVerif;
-                        });
-                      }),
-                  hintText: 'your password',
-                ),
-                style: primaryTextStyle.copyWith(fontSize: hintsize),
-              ),
-            )
-          ],
-        ),
-      );
+          ));
     }
 
     Widget btnUpdate(
@@ -491,6 +715,7 @@ class _EditProfilPageState extends State<EditProfilPage> {
             color: primaryColor,
             elevation: 0,
             onPressed: () {
+              handeleditProfile();
               // Navigator.pushNamed(context, '/home');
             },
             shape:
@@ -507,37 +732,46 @@ class _EditProfilPageState extends State<EditProfilPage> {
     return Scaffold(
         body: ColorfulSafeArea(
             color: primaryColor,
-            child: (MediaQuery.of(context).orientation == Orientation.portrait)
-                ? ListView(
-                    children: [
-                      header(),
-                      nameInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                      alamatInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                      tlpInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                      skillInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                      pendidikanInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                      prodiInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                      emailInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                      passInput(18.sp, 38.h, 10.w, 15.h, 20.sp, 14.sp),
-                      passInputVerif(18.sp, 38.h, 10.w, 15.h, 20.sp, 14.sp),
-                      btnUpdate(38.h, 21.h, 18.sp),
-                    ],
-                  )
-                : Container(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 4,
-                          child: Text('AAAAAAAAAAAAAAAAA'),
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: Column(
-                            children: [],
-                          ),
-                        )
-                      ],
+            child: (initLoad == true)
+                ? Container(
+                    child: SpinKitRing(
+                      color: Colors.blue,
+                      size: 50.0,
                     ),
-                  )));
+                  )
+                : (MediaQuery.of(context).orientation == Orientation.portrait)
+                    ? ListView(
+                        children: [
+                          header(),
+                          nameInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                          alamatInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                          kotaInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                          tlpInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                          skillInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                          pendidikanInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                          prodiInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                          title(18.sp, 15.h, 'Upload CV'),
+                          upCv(38.h, 0, 14.sp),
+                          isLoading
+                              ? LoadingButton()
+                              : btnUpdate(38.h, 21.h, 18.sp),
+                        ],
+                      )
+                    : Container(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 4,
+                              child: Text('AAAAAAAAAAAAAAAAA'),
+                            ),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Column(
+                                children: [],
+                              ),
+                            )
+                          ],
+                        ),
+                      )));
   }
 }

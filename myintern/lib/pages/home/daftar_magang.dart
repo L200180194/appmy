@@ -1,62 +1,126 @@
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
+import 'package:myintern/models/posisi_model.dart';
+import 'package:myintern/pages/widget/loading_button.dart';
+import 'package:myintern/providers/pendaftaran_provider.dart';
 import 'package:myintern/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class DaftarMagang extends StatefulWidget {
-  const DaftarMagang({Key? key}) : super(key: key);
+  final String idPerusahaan;
+
+  final String posisiMagangId;
+
+  DaftarMagang(
+      {Key? key, required this.idPerusahaan, required this.posisiMagangId})
+      : super(key: key);
+  // final PosisiModel posisi;
+  // const DaftarMagang({
+  //   Key? key,
+  //   required this.posisi,
+  // }) : super(key: key);
 
   @override
-  _DaftarMagangState createState() => _DaftarMagangState();
+  _DaftarMagangState createState() =>
+      _DaftarMagangState(idPerusahaan, posisiMagangId);
 }
 
 class _DaftarMagangState extends State<DaftarMagang> {
-  dynamic _filecv;
-  dynamic _filesk;
-  dynamic _filespl;
-
-  void _pickFileCV() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: false,
-        type: FileType.custom,
-        allowedExtensions: ['pdf', 'doc', 'docx']);
-    if (result != null) {
-      PlatformFile file = result.files.first;
-      setState(() {
-        _filecv = file.name;
-      });
-    }
+  void initState() {
+    getSession();
+    super.initState();
   }
 
-  void _pickFilesk() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: false,
-        type: FileType.custom,
-        allowedExtensions: ['pdf', 'doc', 'docx']);
-    if (result != null) {
-      PlatformFile file = result.files.first;
-      setState(() {
-        _filesk = file.name;
-      });
-    }
+  String idPerusahaan;
+  String posisiMagangId;
+  _DaftarMagangState(this.idPerusahaan, this.posisiMagangId);
+  late int id;
+
+  late String token;
+  late String finalDate;
+
+  bool isLoading = false;
+  bool initLoad = true;
+  DateTime now = new DateTime.now();
+  DateTime dateToday =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+// DateTime date = new DateTime(now.year, now.month, now.day);
+  Future<int> getSession() async {
+    var date = new DateTime.now().toString();
+
+    var dateParse = DateTime.parse(date);
+
+    var formattedDate = "${dateParse.year}-${dateParse.month}-${dateParse.day}";
+
+    setState(() {
+      finalDate = formattedDate.toString();
+    });
+    final sp = await SharedPreferences.getInstance();
+    setState(() {
+      id = sp.getInt('id')!.toInt();
+      token = sp.getString('token').toString();
+
+      // print(name);
+    });
+    print(id);
+    print(idPerusahaan);
+    print(posisiMagangId);
+    print(finalDate);
+    return id;
   }
 
-  void _pickFilespl() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: false,
-        type: FileType.custom,
-        allowedExtensions: ['pdf', 'doc', 'docx']);
-    if (result != null) {
-      PlatformFile file = result.files.first;
-      setState(() {
-        _filespl = file.name;
-      });
-    }
-  }
+  TextEditingController keteranganCOntroller = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
+    PendaftaranProvider pp = Provider.of(context);
+    handleDaftar() async {
+      if (keteranganCOntroller.text == '') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: alertColor,
+            content: Text(
+              "Keterangan tidak boleh kosong",
+              style: primaryTextStyle.copyWith(color: Colors.white),
+            )));
+      } else {
+        setState(() {
+          isLoading = true;
+        });
+        if (await pp.daftar(
+            userId: id.toString(),
+            tglDaftar: finalDate,
+            posisiMagangId: posisiMagangId,
+            perusahaanId: idPerusahaan,
+            keteranganDaftar: keteranganCOntroller.text,
+            token: token)) {
+          print('kondisi berhasil');
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: bgGreen,
+              content: Text(
+                "Pendaftaran Berhasil",
+                style: primaryTextStyle.copyWith(color: Colors.white),
+              )));
+          // Navigator.popAndPushNamed(context, '/home');
+          Navigator.pop(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: alertColor,
+              content: Text(
+                "Pendaftaran  Gagal",
+                style: primaryTextStyle.copyWith(color: Colors.white),
+              )));
+        }
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+
     Widget banner() {
       return Container(
           height: 28.h,
@@ -108,16 +172,28 @@ class _DaftarMagangState extends State<DaftarMagang> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Nama',
+              'Keterangan',
               style: primaryTextStyle.copyWith(
                   fontWeight: semibold, fontSize: email),
             ),
             Container(
-              height: containerh,
               child: Center(
                 child: TextFormField(
+                  controller: keteranganCOntroller,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Tidak boleh kosong";
+                    }
+                  },
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  minLines: 6,
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                    hintText: 'MyIntern',
+                    hintText: 'Keterangan singkat pengantar pendaftaran magang',
+                    hintMaxLines: null,
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                       color: Colors.black,
@@ -125,7 +201,7 @@ class _DaftarMagangState extends State<DaftarMagang> {
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: primaryColor, width: 2)),
                     errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2)),
+                        borderSide: BorderSide(color: primaryColor, width: 2)),
                     contentPadding: EdgeInsets.symmetric(
                         horizontal: contentpadw, vertical: contentpadh),
                   ),
@@ -136,175 +212,6 @@ class _DaftarMagangState extends State<DaftarMagang> {
           ],
         ),
       );
-    }
-
-    Widget alamatInput(double email, double input, double containerh,
-        double contentpadh, double contentpadw) {
-      return Container(
-        margin: EdgeInsets.only(
-            top: 11.h, left: defaultMargin, right: defaultMargin),
-        // color: primaryColor,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Alamat',
-              style: primaryTextStyle.copyWith(
-                  fontWeight: semibold, fontSize: email),
-            ),
-            Container(
-              height: containerh,
-              child: Center(
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'Jl. MyIntern',
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: Colors.black,
-                    )),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: primaryColor, width: 2)),
-                    errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2)),
-                    contentPadding: EdgeInsets.symmetric(
-                        horizontal: contentpadw, vertical: contentpadh),
-                  ),
-                  style: primaryTextStyle.copyWith(fontSize: input),
-                ),
-              ),
-            )
-          ],
-        ),
-      );
-    }
-
-    Widget tlpInput(double email, double input, double containerh,
-        double contentpadh, double contentpadw) {
-      return Container(
-        margin: EdgeInsets.only(
-            top: 11.h, left: defaultMargin, right: defaultMargin),
-        // color: primaryColor,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'No Tlp',
-              style: primaryTextStyle.copyWith(
-                  fontWeight: semibold, fontSize: email),
-            ),
-            Container(
-              height: containerh,
-              child: Center(
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    hintText: '1234567890',
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: Colors.black,
-                    )),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: primaryColor, width: 2)),
-                    errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2)),
-                    contentPadding: EdgeInsets.symmetric(
-                        horizontal: contentpadw, vertical: contentpadh),
-                  ),
-                  style: primaryTextStyle.copyWith(fontSize: input),
-                ),
-              ),
-            )
-          ],
-        ),
-      );
-    }
-
-    Widget title(double fs, margintop, String text) {
-      return Container(
-        margin: EdgeInsets.fromLTRB(defaultMargin, margintop, defaultMargin, 0),
-        child: Text(
-          text,
-          style: primaryTextStyle.copyWith(fontWeight: semibold, fontSize: fs),
-        ),
-      );
-    }
-
-    Widget upCv(
-      double containerh,
-      double margintop,
-      double txt,
-    ) {
-      return Container(
-          height: containerh,
-          margin:
-              EdgeInsets.fromLTRB(defaultMargin, margintop, defaultMargin, 0),
-          child: RaisedButton(
-            color: Colors.white,
-            elevation: 0,
-            onPressed: () {
-              _pickFileCV();
-            },
-            shape: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-            // RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            textColor: Colors.black,
-            child: Text(
-              _filecv == null ? 'Upload CV' : _filecv,
-              style: primaryTextStyle.copyWith(
-                  color: Colors.black54, fontSize: txt),
-            ),
-          ));
-    }
-
-    Widget upSk(
-      double containerh,
-      double margintop,
-      double txt,
-    ) {
-      return Container(
-          height: containerh,
-          margin:
-              EdgeInsets.fromLTRB(defaultMargin, margintop, defaultMargin, 0),
-          child: RaisedButton(
-            color: Colors.white,
-            elevation: 0,
-            onPressed: () {
-              _pickFilesk();
-            },
-            shape: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-            // RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            textColor: Colors.black,
-            child: Text(
-              _filesk == null ? 'Upload Surat Keterangan' : _filecv,
-              style: primaryTextStyle.copyWith(
-                  color: Colors.black54, fontSize: txt),
-            ),
-          ));
-    }
-
-    Widget upspl(
-      double containerh,
-      double margintop,
-      double txt,
-    ) {
-      return Container(
-          height: containerh,
-          margin:
-              EdgeInsets.fromLTRB(defaultMargin, margintop, defaultMargin, 0),
-          child: RaisedButton(
-            color: Colors.white,
-            elevation: 0,
-            onPressed: () {
-              _pickFilespl();
-            },
-            shape: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-            // RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            textColor: Colors.black,
-            child: Text(
-              _filespl == null ? 'Upload Surat Persyaratan Lainya' : _filecv,
-              style: primaryTextStyle.copyWith(
-                  color: Colors.black54, fontSize: txt),
-            ),
-          ));
     }
 
     Widget btndaftar(
@@ -320,7 +227,8 @@ class _DaftarMagangState extends State<DaftarMagang> {
             color: primaryColor,
             elevation: 0,
             onPressed: () {
-              Navigator.pushNamed(context, '/home');
+              // Navigator.pushNamed(context, '/home');
+              handleDaftar();
             },
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -341,26 +249,13 @@ class _DaftarMagangState extends State<DaftarMagang> {
                   children: [
                     banner(),
                     nameInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                    alamatInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                    tlpInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                    title(18.sp, 15.h, 'Upload CV'),
-                    upCv(38.h, 0, 14.sp),
-                    title(18.sp, 15.h, 'Upload Surat Keterangan'),
-                    upSk(38.h, 0, 14.sp),
-                    title(18.sp, 15.h, 'Upload Surat Persyaratan Lainya'),
-                    upspl(38.h, 0, 14.sp),
-                    btndaftar(38, 21, 18),
+                    isLoading ? LoadingButton() : btndaftar(38, 21, 18),
                   ],
                 )
               : ListView(
                   children: [
                     banner(),
                     nameInput(18, 14, 38, 15, 10),
-                    alamatInput(18, 14, 38, 15, 10),
-                    tlpInput(18, 14, 38, 15, 10),
-                    tlpInput(18, 14, 38, 15, 10),
-                    tlpInput(18, 14, 38, 15, 10),
-                    tlpInput(18, 14, 38, 15, 10),
                     btndaftar(38, 21, 18),
                   ],
                 )),

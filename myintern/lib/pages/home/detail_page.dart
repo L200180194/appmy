@@ -1,10 +1,14 @@
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 import 'package:myintern/models/posisi_model.dart';
+import 'package:myintern/pages/home/daftar_magang.dart';
 import 'package:myintern/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/link.dart';
 
 class DetailPage extends StatefulWidget {
   // const DetailPage({
@@ -26,6 +30,20 @@ class _DetailPageState extends State<DetailPage> {
   //   SharedPreferences token = await SharedPreferences.getInstance();
   //   return token.getString('token');
   // }
+  // Future<void>? _launched;
+  // Future<void> _launchInBrowser(String url) async {
+  //   print(url);
+  //   if (await canLaunch(url)) {
+  //     await launch(
+  //       url,
+  //       forceSafariVC: false,
+  //       forceWebView: false,
+  //     );
+  //   } else {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
+
   SharedPreferences? pr;
 
   @override
@@ -54,6 +72,7 @@ class _DetailPageState extends State<DetailPage> {
           ));
     }
 
+    print(widget.posisi.perusahaan!.id);
     Widget photo() {
       return Container(
         // color: Colors.red,
@@ -77,7 +96,8 @@ class _DetailPageState extends State<DetailPage> {
                         blurRadius: 7.0,
                         spreadRadius: 3),
                   ]),
-              child: Image.network('${widget.posisi.foto_posisi}'),
+              child: Image.network(
+                  'http://portofoliome.my.id/storage/${widget.posisi.foto_posisi}'),
             ),
             Center(
               child: Text(
@@ -131,6 +151,21 @@ class _DetailPageState extends State<DetailPage> {
             SizedBox(
               height: 10.h,
             ),
+            // HtmlWidget(
+            //   '${widget.posisi.deskripsi_posisi}',
+            //   textStyle: primaryTextStyle.copyWith(
+            //       fontSize: 12.sp, fontWeight: regular),
+            //   customStylesBuilder: (element) {
+            //     // if (element.classes.contains('foo')) {
+            //     return {'text-align': 'justify'};
+            //     // }
+
+            //     // return null;
+            //   },
+            //   // onTapUrl: (url) => setState(() {
+            //   //   _launched = _launchInBrowser(url);
+            //   // }),
+            // ),
             Text(
               '${widget.posisi.deskripsi_posisi}',
               textAlign: TextAlign.justify,
@@ -170,6 +205,18 @@ class _DetailPageState extends State<DetailPage> {
             SizedBox(
               height: 10.h,
             ),
+            // HtmlWidget(
+            //   '${widget.posisi.persyaratan_posisi}',
+            //   textStyle: primaryTextStyle.copyWith(
+            //       fontSize: 12.sp, fontWeight: regular),
+            //   customStylesBuilder: (element) {
+            //     // if (element.classes.contains('foo')) {
+            //     return {'text-align': 'justify'};
+            //     // }
+
+            //     // return null;
+            //   },
+            // ),
             Text(
               '${widget.posisi.persyaratan_posisi}',
               textAlign: TextAlign.justify,
@@ -209,6 +256,18 @@ class _DetailPageState extends State<DetailPage> {
             SizedBox(
               height: 10.h,
             ),
+            // HtmlWidget(
+            //   '${widget.posisi.fasilitas_posisi}',
+            //   textStyle: primaryTextStyle.copyWith(
+            //       fontSize: 12.sp, fontWeight: regular),
+            //   customStylesBuilder: (element) {
+            //     // if (element.classes.contains('foo')) {
+            //     return {'text-align': 'justify'};
+            //     // }
+
+            //     // return null;
+            //   },
+            // ),
             Text(
               '${widget.posisi.fasilitas_posisi}',
               textAlign: TextAlign.justify,
@@ -248,9 +307,21 @@ class _DetailPageState extends State<DetailPage> {
             SizedBox(
               height: 10.h,
             ),
+            // HtmlWidget(
+            //   '${widget.posisi.keterangan_posisi}',
+            //   textStyle: primaryTextStyle.copyWith(
+            //       fontSize: 12.sp, fontWeight: regular),
+            //   customStylesBuilder: (element) {
+            //     // if (element.classes.contains('foo')) {
+            //     return {'text-align': 'justify'};
+            //     // }
+
+            //     // return null;
+            //   },
+            // ),
             Text(
-              // '${widget.posisi.keterangan_posisi}',
-              '${this.pr?.getString('token')}',
+              '${widget.posisi.keterangan_posisi}',
+              // '${this.pr?.getString('token')}',
 
               textAlign: TextAlign.justify,
               style: primaryTextStyle.copyWith(
@@ -274,7 +345,14 @@ class _DetailPageState extends State<DetailPage> {
             color: primaryColor,
             elevation: 0,
             onPressed: () {
-              Navigator.pushNamed(context, '/home');
+              // Navigator.pushNamed(context, '/daftar');
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DaftarMagang(
+                          idPerusahaan: widget.posisi.perusahaan!.id.toString(),
+                          posisiMagangId: widget.posisi.id.toString())));
+              // print(widget.posisi.deskripsi_posisi);
             },
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
