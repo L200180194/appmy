@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:myintern/models/user_model.dart';
 import 'package:myintern/pages/widget/informasi_card.dart';
+import 'package:myintern/pages/widget/informasi_card_landscape.dart';
 import 'package:myintern/pages/widget/posisi_card.dart';
 import 'package:myintern/pages/widget/posisi_cardlandscape.dart';
 import 'package:myintern/providers/auth_providers.dart';
@@ -60,12 +61,7 @@ class _InformationPageState extends State<InformationPage> {
                     // [Text('')])
                     pp.posisis.map((e) => InformasiCard(e)).toList())
             : ListView(
-                children: [
-                  // Text('Home Page'),
-                  // Image.asset('assets/tokopedia.png'),
-
-                  PosisiCardLandscape(),
-                ],
-              );
+                children:
+                    pp.posisis.map((e) => InformasiCardLandscape(e)).toList());
   }
 }

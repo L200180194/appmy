@@ -9,6 +9,8 @@ import 'package:myintern/pages/home/detail_informasi_page.dart';
 import 'package:myintern/pages/home/ganti_password.dart';
 import 'package:myintern/pages/home/main_page.dart';
 import 'package:myintern/pages/home/profile_page.dart';
+import 'package:myintern/pages/home/search_page.dart';
+import 'package:myintern/pages/home/search_result.dart';
 import 'package:myintern/pages/signin_page.dart';
 import 'package:myintern/pages/signup_page.dart';
 import 'package:myintern/pages/splash.dart';
@@ -62,6 +64,8 @@ class MyApp extends StatelessWidget {
             // '/detail': (context) => DetailPage(),
             // '/detailinformasi': (context) => DetailInformasiPage(),
             '/editprofil': (context) => EditProfilPage(),
+            '/search': (context) => SearchPage(),
+            // '/searchresult': (context) => SearchResultPage(),
             '/profile': (context) => ProfilePage(),
             '/editfoto': (context) => EditFotoPage(),
             '/gantipassword': (context) => GantiPassword(),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:myintern/models/user_model.dart';
 import 'package:myintern/pages/widget/loading_button.dart';
+import 'package:myintern/pages/widget/loading_button_landscape.dart';
 import 'package:myintern/providers/auth_providers.dart';
 import 'package:myintern/providers/posisi_provider.dart';
 import 'package:myintern/theme.dart';
@@ -276,10 +277,12 @@ class _SignInPageState extends State<SignInPage> {
                       // btnlogin(38.h, 21.h, 18.sp),
                       // text(12.sp, 12.sp),
                       banner(),
-                      emailInput(18, 14, 38, 15, 10),
-                      passInput(18, 38, 10, 15, 20, 14),
-                      btnlogin(38, 21, 18),
-                      text(12, 12),
+                      emailInput(25.sp, 20.sp, 38.h, 15.h, 10.w),
+                      passInput(25.sp, 38.h, 10.w, 15.h, 20.sp, 20.sp),
+                      isLoading
+                          ? LoadingButtonLandscape()
+                          : btnlogin(70.h, 21.h, 30.sp),
+                      text(20.sp, 20.sp),
                     ],
                   )));
   }

@@ -2,7 +2,7 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:myintern/models/posisi_model.dart';
 import 'package:myintern/pages/home/daftar_magang.dart';
 import 'package:myintern/theme.dart';
@@ -123,10 +123,11 @@ class _DetailPageState extends State<DetailPage> {
       );
     }
 
-    Widget deskripsi() {
+    Widget deskripsi(
+        double pad, double mt, double mb, double fs, double h, double fs2) {
       return Container(
-        padding: EdgeInsets.all(12.sp),
-        margin: EdgeInsets.fromLTRB(defaultMargin, 12.h, defaultMargin, 20.h),
+        padding: EdgeInsets.all(pad),
+        margin: EdgeInsets.fromLTRB(defaultMargin, mt, defaultMargin, mb),
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(color: Colors.black12),
@@ -145,42 +146,42 @@ class _DetailPageState extends State<DetailPage> {
             Text(
               'Deskripsi ',
               textAlign: TextAlign.start,
-              style:
-                  primaryTextStyle.copyWith(fontSize: 14.sp, fontWeight: bold),
+              style: primaryTextStyle.copyWith(fontSize: fs, fontWeight: bold),
             ),
             SizedBox(
-              height: 10.h,
+              height: h,
             ),
-            // HtmlWidget(
-            //   '${widget.posisi.deskripsi_posisi}',
-            //   textStyle: primaryTextStyle.copyWith(
-            //       fontSize: 12.sp, fontWeight: regular),
-            //   customStylesBuilder: (element) {
-            //     // if (element.classes.contains('foo')) {
-            //     return {'text-align': 'justify'};
-            //     // }
-
-            //     // return null;
-            //   },
-            //   // onTapUrl: (url) => setState(() {
-            //   //   _launched = _launchInBrowser(url);
-            //   // }),
-            // ),
-            Text(
+            HtmlWidget(
               '${widget.posisi.deskripsi_posisi}',
-              textAlign: TextAlign.justify,
-              style: primaryTextStyle.copyWith(
-                  fontSize: 12.sp, fontWeight: regular),
+              textStyle:
+                  primaryTextStyle.copyWith(fontSize: fs2, fontWeight: regular),
+              customStylesBuilder: (element) {
+                // if (element.classes.contains('foo')) {
+                return {'text-align': 'justify'};
+                // }
+
+                // return null;
+              },
+              // onTapUrl: (url) => setState(() {
+              //   _launched = _launchInBrowser(url);
+              // }),
             ),
+            // Text(
+            //   '${widget.posisi.deskripsi_posisi}',
+            //   textAlign: TextAlign.justify,
+            //   style:
+            //       primaryTextStyle.copyWith(fontSize: fs, fontWeight: regular),
+            // ),
           ],
         ),
       );
     }
 
-    Widget persyaratan() {
+    Widget persyaratan(
+        double pad, double mt, double mb, double fs, double h, double fs2) {
       return Container(
-        padding: EdgeInsets.all(12.sp),
-        margin: EdgeInsets.fromLTRB(defaultMargin, 0, defaultMargin, 20.h),
+        padding: EdgeInsets.all(pad),
+        margin: EdgeInsets.fromLTRB(defaultMargin, mt, defaultMargin, mb),
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(color: Colors.black12),
@@ -199,39 +200,39 @@ class _DetailPageState extends State<DetailPage> {
             Text(
               'Persyaratan',
               textAlign: TextAlign.start,
-              style:
-                  primaryTextStyle.copyWith(fontSize: 14.sp, fontWeight: bold),
+              style: primaryTextStyle.copyWith(fontSize: fs, fontWeight: bold),
             ),
             SizedBox(
-              height: 10.h,
+              height: h,
             ),
-            // HtmlWidget(
-            //   '${widget.posisi.persyaratan_posisi}',
-            //   textStyle: primaryTextStyle.copyWith(
-            //       fontSize: 12.sp, fontWeight: regular),
-            //   customStylesBuilder: (element) {
-            //     // if (element.classes.contains('foo')) {
-            //     return {'text-align': 'justify'};
-            //     // }
-
-            //     // return null;
-            //   },
-            // ),
-            Text(
+            HtmlWidget(
               '${widget.posisi.persyaratan_posisi}',
-              textAlign: TextAlign.justify,
-              style: primaryTextStyle.copyWith(
-                  fontSize: 12.sp, fontWeight: regular),
+              textStyle:
+                  primaryTextStyle.copyWith(fontSize: fs2, fontWeight: regular),
+              customStylesBuilder: (element) {
+                // if (element.classes.contains('foo')) {
+                return {'text-align': 'justify'};
+                // }
+
+                // return null;
+              },
             ),
+            // Text(
+            //   '${widget.posisi.persyaratan_posisi}',
+            //   textAlign: TextAlign.justify,
+            //   style:
+            //       primaryTextStyle.copyWith(fontSize: fs2, fontWeight: regular),
+            // ),
           ],
         ),
       );
     }
 
-    Widget fasilitas() {
+    Widget fasilitas(
+        double pad, double mt, double mb, double fs, double h, double fs2) {
       return Container(
-        padding: EdgeInsets.all(12.sp),
-        margin: EdgeInsets.fromLTRB(defaultMargin, 0, defaultMargin, 20.h),
+        padding: EdgeInsets.all(pad),
+        margin: EdgeInsets.fromLTRB(defaultMargin, mt, defaultMargin, mb),
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(color: Colors.black12),
@@ -250,39 +251,39 @@ class _DetailPageState extends State<DetailPage> {
             Text(
               'Fasilitas ',
               textAlign: TextAlign.start,
-              style:
-                  primaryTextStyle.copyWith(fontSize: 14.sp, fontWeight: bold),
+              style: primaryTextStyle.copyWith(fontSize: fs, fontWeight: bold),
             ),
             SizedBox(
-              height: 10.h,
+              height: h,
             ),
-            // HtmlWidget(
-            //   '${widget.posisi.fasilitas_posisi}',
-            //   textStyle: primaryTextStyle.copyWith(
-            //       fontSize: 12.sp, fontWeight: regular),
-            //   customStylesBuilder: (element) {
-            //     // if (element.classes.contains('foo')) {
-            //     return {'text-align': 'justify'};
-            //     // }
-
-            //     // return null;
-            //   },
-            // ),
-            Text(
+            HtmlWidget(
               '${widget.posisi.fasilitas_posisi}',
-              textAlign: TextAlign.justify,
-              style: primaryTextStyle.copyWith(
-                  fontSize: 12.sp, fontWeight: regular),
+              textStyle:
+                  primaryTextStyle.copyWith(fontSize: fs2, fontWeight: regular),
+              customStylesBuilder: (element) {
+                // if (element.classes.contains('foo')) {
+                return {'text-align': 'justify'};
+                // }
+
+                // return null;
+              },
             ),
+            // Text(
+            //   '${widget.posisi.fasilitas_posisi}',
+            //   textAlign: TextAlign.justify,
+            //   style:
+            //       primaryTextStyle.copyWith(fontSize: fs2, fontWeight: regular),
+            // ),
           ],
         ),
       );
     }
 
-    Widget keterangan() {
+    Widget keterangan(
+        double pad, double mt, double mb, double fs, double h, double fs2) {
       return Container(
-        padding: EdgeInsets.all(12.sp),
-        margin: EdgeInsets.fromLTRB(defaultMargin, 0, defaultMargin, 0),
+        padding: EdgeInsets.all(pad),
+        margin: EdgeInsets.fromLTRB(defaultMargin, mt, defaultMargin, mb),
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(color: Colors.black12),
@@ -301,32 +302,31 @@ class _DetailPageState extends State<DetailPage> {
             Text(
               'Keterangan ',
               textAlign: TextAlign.start,
-              style:
-                  primaryTextStyle.copyWith(fontSize: 14.sp, fontWeight: bold),
+              style: primaryTextStyle.copyWith(fontSize: fs, fontWeight: bold),
             ),
             SizedBox(
-              height: 10.h,
+              height: h,
             ),
-            // HtmlWidget(
-            //   '${widget.posisi.keterangan_posisi}',
-            //   textStyle: primaryTextStyle.copyWith(
-            //       fontSize: 12.sp, fontWeight: regular),
-            //   customStylesBuilder: (element) {
-            //     // if (element.classes.contains('foo')) {
-            //     return {'text-align': 'justify'};
-            //     // }
-
-            //     // return null;
-            //   },
-            // ),
-            Text(
+            HtmlWidget(
               '${widget.posisi.keterangan_posisi}',
-              // '${this.pr?.getString('token')}',
+              textStyle:
+                  primaryTextStyle.copyWith(fontSize: fs2, fontWeight: regular),
+              customStylesBuilder: (element) {
+                // if (element.classes.contains('foo')) {
+                return {'text-align': 'justify'};
+                // }
 
-              textAlign: TextAlign.justify,
-              style: primaryTextStyle.copyWith(
-                  fontSize: 12.sp, fontWeight: regular),
+                // return null;
+              },
             ),
+            // Text(
+            //   '${widget.posisi.keterangan_posisi}',
+            //   // '${this.pr?.getString('token')}',
+
+            //   textAlign: TextAlign.justify,
+            //   style:
+            //       primaryTextStyle.copyWith(fontSize: fs2, fontWeight: regular),
+            // ),
           ],
         ),
       );
@@ -374,15 +374,23 @@ class _DetailPageState extends State<DetailPage> {
                   children: [
                     banner(),
                     photo(),
-                    deskripsi(),
-                    persyaratan(),
-                    fasilitas(),
-                    keterangan(),
+                    deskripsi(12.sp, 12.h, 20.h, 14.sp, 10.h, 12.sp),
+                    persyaratan(12.sp, 0, 20.h, 14.sp, 10.h, 12.sp),
+                    fasilitas(12.sp, 0, 20.h, 14.sp, 10.h, 12.sp),
+                    keterangan(12.sp, 0, 20.h, 14.sp, 10.h, 12.sp),
                     btnlogin(38.h, 21.h, 18.sp),
                   ],
                 )
               : ListView(
-                  children: [banner()],
+                  children: [
+                    banner(),
+                    photo(),
+                    deskripsi(12, 12, 20, 14, 10, 12),
+                    persyaratan(12, 0, 20, 14, 10, 12),
+                    fasilitas(12, 0, 20, 14, 10, 12),
+                    keterangan(12, 0, 20, 14, 10, 12),
+                    btnlogin(38, 21, 18),
+                  ],
                 )),
     );
   }

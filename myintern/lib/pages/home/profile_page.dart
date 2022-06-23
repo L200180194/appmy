@@ -559,25 +559,16 @@ class _ProfilePageState extends State<ProfilePage> {
                   btnKeluar(38.h, 0, 16.sp, 18.sp),
                 ],
               )
-            : Container(
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: Text('AAAAAAAAAAAAAAAAA'),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Column(
-                        children: [
-                          abtme(),
-                          PendTer(),
-                          Akun(),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+            : ListView(
+                children: [
+                  header(),
+                  abtme(),
+                  PendTer(),
+                  Akun(),
+                  btnEdit(38.h, 21.h, 16.sp, 18.sp),
+                  btnEditpass(38.h, 21.h, 16.sp, 18.sp),
+                  btnKeluar(38.h, 0, 16.sp, 18.sp),
+                ],
               );
   }
 }

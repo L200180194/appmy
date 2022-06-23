@@ -114,7 +114,10 @@ class _MainPageState extends State<MainPage> {
                 Container(
                   margin: EdgeInsets.only(right: 15.w),
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/search');
+                      print('aaaa');
+                    },
                     icon: Icon(Icons.search_rounded),
                     iconSize: 30.sp,
                   ),
@@ -128,11 +131,13 @@ class _MainPageState extends State<MainPage> {
             bottomNavigationBar: btmnav(),
             appBar: AppBar(
               toolbarHeight: 80.h,
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(5),
-              )),
+              elevation: (curIndex == 2) ? 0 : 5,
+              shape: (curIndex == 2)
+                  ? RoundedRectangleBorder()
+                  : RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(5),
+                    )),
               leading: SizedBox(),
               title: Center(
                 child: (curIndex == 2)
@@ -155,7 +160,10 @@ class _MainPageState extends State<MainPage> {
                 Container(
                   margin: EdgeInsets.only(right: 15.w),
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/search');
+                      print('aaaa');
+                    },
                     icon: Icon(Icons.search_rounded),
                     iconSize: 40.sp,
                   ),

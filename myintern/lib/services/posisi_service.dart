@@ -14,13 +14,37 @@ class PosisiService {
     var response = await http.get(urlallposisi, headers: headers);
     // print(response.body);
     if (response.statusCode == 200) {
-      List data = jsonDecode(response.body)['data']['data'];
+      List data = jsonDecode(response.body)['data'];
       List<PosisiModel> posisi = [];
 
       for (var item in data) {
         posisi.add(PosisiModel.fromJson(item));
       }
 
+      return posisi;
+    } else {
+      throw Exception('Gagal get Posisi');
+    }
+  }
+
+  Future<List<PosisiModel>> getSearchPosisi({required String text}) async {
+    // var urlallposisi =
+    // Uri.parse('http://192.168.0.115:8000/api/posisimagang/api');
+    var urlallposisi = Uri.parse(
+        'http://portofoliome.my.id/api/posisimagang/api?nama_posisi=$text');
+    var headers = {'Content-Type': 'application/json'};
+    print(urlallposisi);
+
+    var response = await http.get(urlallposisi, headers: headers);
+    // print(response.body);
+    if (response.statusCode == 200) {
+      List data = jsonDecode(response.body)['data'];
+      List<PosisiModel> posisi = [];
+
+      for (var item in data) {
+        posisi.add(PosisiModel.fromJson(item));
+      }
+      print(data);
       return posisi;
     } else {
       throw Exception('Gagal get Posisi');

@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:myintern/models/posisi_model.dart';
 import 'package:myintern/pages/widget/loading_button.dart';
+import 'package:myintern/pages/widget/loading_button_landscape.dart';
 import 'package:myintern/providers/profile_provider.dart';
 import 'package:myintern/theme.dart';
 import 'package:provider/provider.dart';
@@ -243,7 +244,7 @@ class _EditFotoPageState extends State<EditFotoPage> {
                   ? ListView(
                       children: [
                         banner(),
-                        photo(),
+                        // photo(),
                         upFoto(38.h, 0, 14.sp),
                         isLoading
                             ? LoadingButton()
@@ -251,7 +252,14 @@ class _EditFotoPageState extends State<EditFotoPage> {
                       ],
                     )
                   : ListView(
-                      children: [banner()],
+                      children: [
+                        banner(),
+                        // photo(),
+                        upFoto(38, 0, 14),
+                        isLoading
+                            ? LoadingButtonLandscape()
+                            : btnlogin(38, 21, 18),
+                      ],
                     )),
     );
   }

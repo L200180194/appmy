@@ -9,6 +9,7 @@ import 'package:myintern/models/pendidikan_model.dart';
 import 'package:myintern/models/prodi_model.dart';
 import 'package:myintern/models/skill_model.dart';
 import 'package:myintern/pages/widget/loading_button.dart';
+import 'package:myintern/pages/widget/loading_button_landscape.dart';
 import 'package:myintern/providers/auth_providers.dart';
 import 'package:myintern/providers/informasi_providers.dart';
 import 'package:myintern/services/auth_service.dart';
@@ -904,8 +905,18 @@ class _SignUpPageState extends State<SignUpPage> {
                           passInputVerif(18, 38, 10, 15, 20, 14),
                           nameInput(18, 14, 38, 15, 10),
                           tlpInput(18, 14, 38, 15, 10),
-                          btnlogin(38, 21, 18),
+                          alamatInput(18, 14, 38, 15, 10),
+                          kotaInput(18, 14, 45, 15, 10),
+                          PendidikanInput(18, 14, 45, 15, 10),
+                          ProdiInput(18, 14, 45, 15, 10),
+                          SkillInput(18, 14, 45, 15, 10),
+                          title(18, 15.h, 'Upload CV'),
+                          upCv(38, 0, 14),
+                          isLoading
+                              ? LoadingButtonLandscape()
+                              : btnlogin(38, 21, 18),
                           text(12, 12),
+                          // text(12, 12),
                         ],
                       )));
   }

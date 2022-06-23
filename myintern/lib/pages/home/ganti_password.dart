@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:myintern/models/posisi_model.dart';
 import 'package:myintern/pages/widget/loading_button.dart';
+import 'package:myintern/pages/widget/loading_button_landscape.dart';
 import 'package:myintern/providers/profile_provider.dart';
 import 'package:myintern/theme.dart';
 import 'package:provider/provider.dart';
@@ -370,7 +371,15 @@ class _GantiPasswordState extends State<GantiPassword> {
                       ],
                     )
                   : ListView(
-                      children: [banner()],
+                      children: [
+                        banner(),
+                        passInput(18, 38, 10, 15, 20, 14),
+                        passInputNew(18, 38, 10, 15, 20, 14),
+                        passInputVerif(18, 38, 10, 15, 20, 14),
+                        isLoading
+                            ? LoadingButtonLandscape()
+                            : btnlogin(38, 21, 18),
+                      ],
                     )),
     );
   }

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:ffi';
+// import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -51,12 +51,7 @@ class _HomePageState extends State<HomePage> {
                 children:
                     pp.posisis.map((posisi) => PosisiCard(posisi)).toList())
             : ListView(
-                children: [
-                  // Text('Home Page'),
-                  // Image.asset('assets/tokopedia.png'),
-
-                  PosisiCardLandscape(),
-                ],
-              );
+                children:
+                    pp.posisis.map((e) => PosisiCardLandscape(e)).toList());
   }
 }

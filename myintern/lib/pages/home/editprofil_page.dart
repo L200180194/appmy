@@ -11,6 +11,7 @@ import 'package:myintern/models/pendidikan_model.dart';
 import 'package:myintern/models/prodi_model.dart';
 import 'package:myintern/models/skill_model.dart';
 import 'package:myintern/pages/widget/loading_button.dart';
+import 'package:myintern/pages/widget/loading_button_landscape.dart';
 import 'package:myintern/providers/informasi_providers.dart';
 import 'package:myintern/providers/profile_provider.dart';
 import 'package:myintern/theme.dart';
@@ -192,7 +193,9 @@ class _EditProfilPageState extends State<EditProfilPage> {
     Widget header() {
       return Container(
         margin: EdgeInsets.only(bottom: defaultMargin),
-        height: 220.h,
+        height: (MediaQuery.of(context).orientation == Orientation.portrait)
+            ? 220.h
+            : 250.h,
         alignment: Alignment.center,
         decoration: BoxDecoration(
             color: primaryColor,
@@ -273,6 +276,8 @@ class _EditProfilPageState extends State<EditProfilPage> {
                         ),
                 ),
                 Container(
+                  width: 40.h,
+                  height: 40.h,
                   decoration: ShapeDecoration(
                     color: Colors.white,
                     shape: CircleBorder(),
@@ -281,7 +286,10 @@ class _EditProfilPageState extends State<EditProfilPage> {
                       onPressed: () {
                         Navigator.pushNamed(context, '/editfoto');
                       },
-                      icon: Icon(Icons.edit)),
+                      icon: Icon(
+                        Icons.edit,
+                        size: 20.sp,
+                      )),
                 )
               ],
             ),
@@ -757,21 +765,22 @@ class _EditProfilPageState extends State<EditProfilPage> {
                               : btnUpdate(38.h, 21.h, 18.sp),
                         ],
                       )
-                    : Container(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: Text('AAAAAAAAAAAAAAAAA'),
-                            ),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: Column(
-                                children: [],
-                              ),
-                            )
-                          ],
-                        ),
+                    : ListView(
+                        children: [
+                          header(),
+                          nameInput(18, 14, 38, 15, 10),
+                          alamatInput(18, 14, 38, 15, 10),
+                          kotaInput(18, 14, 45, 15, 10),
+                          tlpInput(18, 14, 45, 15, 10),
+                          skillInput(18, 14, 45, 15, 10),
+                          pendidikanInput(18, 14, 45, 15, 10),
+                          prodiInput(18, 14, 45, 15, 10),
+                          title(18, 15.h, 'Upload CV'),
+                          upCv(38, 0, 14),
+                          isLoading
+                              ? LoadingButtonLandscape()
+                              : btnUpdate(38, 21, 18),
+                        ],
                       )));
   }
 }

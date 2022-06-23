@@ -228,7 +228,9 @@ class _DetailInformasiPageState extends State<DetailInformasiPage> {
               children: [
                 // Text('Home Page'),
                 // Image.asset('assets/tokopedia.png'),
-                banner()
+                banner(),
+                foto(),
+                box(),
               ],
             ),
     );

@@ -103,29 +103,37 @@ class InformasiCard extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 10.w, vertical: 2.h),
-                        margin: EdgeInsets.only(left: 9.w),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: blueclipColor),
-                        child: Text(
-                          '${informasi.alamatPerusahaan}',
-                          style: primaryTextStyle.copyWith(fontSize: 5.sp),
-                        )),
-                    // Container(
-                    //     padding: EdgeInsets.symmetric(
-                    //         horizontal: 10.w, vertical: 2.h),
-                    //     margin: EdgeInsets.only(left: 4.w),
-                    //     decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(10),
-                    //         color: blueclipColor),
-                    //     child: Text(
-                    //       '${posisi.keterangan_posisi}',
-                    //       overflow: TextOverflow.ellipsis,
-                    //       style: primaryTextStyle.copyWith(fontSize: 12.sp),
-                    //     )),
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10.w, vertical: 2.h),
+                          margin: EdgeInsets.only(left: 9.w),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: blueclipColor),
+                          child: Text(
+                            '${informasi.alamatPerusahaan}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: primaryTextStyle.copyWith(fontSize: 10.sp),
+                          )),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10.w, vertical: 2.h),
+                          margin: EdgeInsets.only(left: 4.w),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: blueclipColor),
+                          child: Text(
+                            '${informasi.keteranganPosisi}',
+                            overflow: TextOverflow.ellipsis,
+                            style: primaryTextStyle.copyWith(fontSize: 10.sp),
+                          )),
+                    ),
                     Expanded(
                         flex: 2,
                         child: Container(

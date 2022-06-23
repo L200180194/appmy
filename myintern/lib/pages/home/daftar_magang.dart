@@ -2,6 +2,7 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:myintern/models/posisi_model.dart';
 import 'package:myintern/pages/widget/loading_button.dart';
+import 'package:myintern/pages/widget/loading_button_landscape.dart';
 import 'package:myintern/providers/pendaftaran_provider.dart';
 import 'package:myintern/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -121,7 +122,7 @@ class _DaftarMagangState extends State<DaftarMagang> {
       }
     }
 
-    Widget banner() {
+    Widget banner(double fs) {
       return Container(
           height: 28.h,
           margin: EdgeInsets.symmetric(
@@ -143,8 +144,8 @@ class _DaftarMagangState extends State<DaftarMagang> {
                 fit: BoxFit.scaleDown,
                 child: Text(
                   'Pendaftaran',
-                  style: primaryTextStyle.copyWith(
-                      fontWeight: bold, fontSize: 18.sp),
+                  style:
+                      primaryTextStyle.copyWith(fontWeight: bold, fontSize: fs),
                 ),
               )),
               Expanded(flex: 2, child: Container())
@@ -247,16 +248,18 @@ class _DaftarMagangState extends State<DaftarMagang> {
           child: (MediaQuery.of(context).orientation == Orientation.portrait)
               ? ListView(
                   children: [
-                    banner(),
+                    banner(18.sp),
                     nameInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
                     isLoading ? LoadingButton() : btndaftar(38, 21, 18),
                   ],
                 )
               : ListView(
                   children: [
-                    banner(),
+                    banner(18),
                     nameInput(18, 14, 38, 15, 10),
-                    btndaftar(38, 21, 18),
+                    isLoading
+                        ? LoadingButtonLandscape()
+                        : btndaftar(38, 21, 18),
                   ],
                 )),
     );

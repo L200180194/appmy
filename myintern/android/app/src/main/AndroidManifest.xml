@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
    <application
     android:label="myintern"
-    android:icon="@mipmap/ic_launcher"
+    android:icon="@mipmap/logo_myintern"
     android:requestLegacyExternalStorage="true"
   >
         <activity
