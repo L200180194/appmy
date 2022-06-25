@@ -28,7 +28,7 @@ class PendaftaranModel {
     required this.updatedAt,
     required this.name,
     required this.alamatUser,
-    required this.fotoUser,
+    // required this.fotoUser,
     required this.cvUser,
     required this.notlpUser,
     required this.emailVerifiedAt,
@@ -69,7 +69,7 @@ class PendaftaranModel {
   String updatedAt;
   String name;
   String alamatUser;
-  String fotoUser;
+  // String fotoUser;
   String cvUser;
   String notlpUser;
   dynamic emailVerifiedAt;
@@ -111,7 +111,7 @@ class PendaftaranModel {
         updatedAt: json["updated_at"],
         name: json["name"],
         alamatUser: json["alamat_user"],
-        fotoUser: json["foto_user"],
+        // fotoUser: json["foto_user"],
         cvUser: json["cv_user"],
         notlpUser: json["notlp_user"],
         emailVerifiedAt: json["email_verified_at"],
@@ -153,7 +153,7 @@ class PendaftaranModel {
         "updated_at": updatedAt,
         "name": name,
         "alamat_user": alamatUser,
-        "foto_user": fotoUser,
+        // "foto_user": fotoUser,
         "cv_user": cvUser,
         "notlp_user": notlpUser,
         "email_verified_at": emailVerifiedAt,

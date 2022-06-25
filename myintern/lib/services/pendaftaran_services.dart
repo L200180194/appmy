@@ -35,9 +35,10 @@ class PendaftaranService {
         },
         body: body);
     print(response.body);
-
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body)['data'];
+    var status = jsonDecode(response.body)['meta']['code'];
+    print(status);
+    var data = jsonDecode(response.body);
+    if (status == 200) {
       // UserModel user = UserModel.fromJson(data['user']);
       // user.token = 'Bearer ' + data['access_token'];
       // setToken(data['access_token']);
@@ -46,6 +47,10 @@ class PendaftaranService {
       // String foto_user = data['user']['foto_user'];
       print(data);
       // print(data['user']['name']);
+      return data;
+    } else if (status == 400) {
+      print('Masuk sudah mendaftar');
+      print(data);
       return data;
     } else {
       throw Exception('Gagal Mendaftar');

@@ -232,9 +232,9 @@ class _EditProfilPageState extends State<EditProfilPage> {
                     child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    '  ',
+                    'Update Profile',
                     style: primaryTextStyle.copyWith(
-                        fontWeight: bold, fontSize: 18.sp),
+                        fontWeight: bold, fontSize: 18.sp, color: Colors.white),
                   ),
                 )),
                 Expanded(flex: 2, child: Container())
@@ -293,14 +293,14 @@ class _EditProfilPageState extends State<EditProfilPage> {
                 )
               ],
             ),
-            Container(
-              margin: EdgeInsets.only(bottom: 10.h),
-              child: Text(
-                'Update Profile',
-                style: primaryTextStyle.copyWith(
-                    color: Colors.white, fontSize: 18.sp, fontWeight: bold),
-              ),
-            )
+            // Container(
+            //   margin: EdgeInsets.only(bottom: 10.h),
+            //   child: Text(
+            //     'Update Profile',
+            //     style: primaryTextStyle.copyWith(
+            //         color: Colors.white, fontSize: 18.sp, fontWeight: bold),
+            //   ),
+            // )
           ],
         ),
       );
@@ -703,7 +703,7 @@ class _EditProfilPageState extends State<EditProfilPage> {
             // RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             textColor: Colors.black,
             child: Text(
-              _filecv == null ? 'Upload CV' : _filecv,
+              _filecv == null ? 'Upload CV (PDF)' : _filecv,
               style: primaryTextStyle.copyWith(
                   color: Colors.black54, fontSize: txt),
             ),
@@ -752,9 +752,9 @@ class _EditProfilPageState extends State<EditProfilPage> {
                         children: [
                           header(),
                           nameInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                          alamatInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
-                          kotaInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
                           tlpInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                          kotaInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
+                          alamatInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
                           skillInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
                           pendidikanInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
                           prodiInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
@@ -769,9 +769,9 @@ class _EditProfilPageState extends State<EditProfilPage> {
                         children: [
                           header(),
                           nameInput(18, 14, 38, 15, 10),
-                          alamatInput(18, 14, 38, 15, 10),
-                          kotaInput(18, 14, 45, 15, 10),
                           tlpInput(18, 14, 45, 15, 10),
+                          kotaInput(18, 14, 45, 15, 10),
+                          alamatInput(18, 14, 38, 15, 10),
                           skillInput(18, 14, 45, 15, 10),
                           pendidikanInput(18, 14, 45, 15, 10),
                           prodiInput(18, 14, 45, 15, 10),

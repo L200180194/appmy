@@ -83,7 +83,7 @@ class InformasiCard extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(top: 12.h),
+                            margin: EdgeInsets.only(top: 5.h),
                             child: SizedBox(
                               width: 210.w,
                               child: Text(
@@ -141,6 +141,8 @@ class InformasiCard extends StatelessWidget {
                             alignment: Alignment.centerRight,
                             child: Text(
                               '${informasi.deadlinePosisi}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: primaryTextStyle.copyWith(fontSize: 12.sp),
                             )))
                   ],

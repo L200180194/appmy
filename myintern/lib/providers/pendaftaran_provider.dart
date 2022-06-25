@@ -22,7 +22,7 @@ class PendaftaranProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<bool> daftar({
+  Future<int> daftar({
     required String tglDaftar,
     required String userId,
     required String posisiMagangId,
@@ -40,13 +40,20 @@ class PendaftaranProvider with ChangeNotifier {
           keteranganDaftar: keteranganDaftar);
 
       // _user = user;
-      print(data);
-      print('provider berhasil');
-      return true;
+      if (data['meta']['code'] == 200) {
+        return 200;
+      } else if (data['meta']['code'] == 400) {
+        return 400;
+      } else {
+        return 3;
+      }
+      // print(data);
+      // print('provider berhasil');
+      // return true;
     } catch (e) {
       print('provider gagal');
       print(e);
-      return false;
+      return 2;
     }
   }
 

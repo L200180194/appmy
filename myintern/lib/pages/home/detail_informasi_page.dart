@@ -162,7 +162,7 @@ class _DetailInformasiPageState extends State<DetailInformasiPage> {
             ),
             Container(
               margin: EdgeInsets.only(top: defaultMargin),
-              padding: EdgeInsets.all(5.sp),
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
               decoration: BoxDecoration(
                   color: clr,
                   border: Border.all(color: Colors.black12),

@@ -101,13 +101,13 @@ class _SignUpPageState extends State<SignUpPage> {
   bool initLoad = true;
   List<String> data = ["a", "b", "c", "d", "e"];
   dynamic _filecv;
-  late String path;
-  late String fn;
-  late int size;
-  late String kota;
-  late String pendidikan;
-  late String prod;
-  late String skill;
+  String path = '';
+  String fn = '';
+  int size = 0;
+  String kota = '';
+  String pendidikan = '';
+  String prod = '';
+  String skill = '';
   // late Map kota;
 
   void _pickFileCV() async {
@@ -147,17 +147,18 @@ class _SignUpPageState extends State<SignUpPage> {
     // ignore: unused_element
 
     handleSignUp() async {
+      print(kota);
       if (nameController.text == '' ||
           emailController.text == '' ||
           passwordController.text == '' ||
           tlpController.text == '' ||
           alamatController.text == '' ||
-          fn == '' ||
-          kota == '' ||
-          pendidikan == '' ||
-          path == '' ||
-          prod == '' ||
-          skill == '') {
+          fn.isEmpty ||
+          kota.isEmpty ||
+          pendidikan.isEmpty ||
+          path.isEmpty ||
+          prod.isEmpty ||
+          skill.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: alertColor,
             content: Text(
@@ -801,7 +802,7 @@ class _SignUpPageState extends State<SignUpPage> {
             // RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             textColor: Colors.black,
             child: Text(
-              _filecv == null ? 'Upload CV' : _filecv,
+              _filecv == null ? 'Upload CV (PDF)' : _filecv,
               style: primaryTextStyle.copyWith(
                   color: Colors.black54, fontSize: txt),
             ),
@@ -921,7 +922,3 @@ class _SignUpPageState extends State<SignUpPage> {
                       )));
   }
 }
-
-class Width {}
-
-class Srting {}

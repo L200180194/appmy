@@ -92,13 +92,14 @@ class _DaftarMagangState extends State<DaftarMagang> {
         setState(() {
           isLoading = true;
         });
-        if (await pp.daftar(
+        var data = await pp.daftar(
             userId: id.toString(),
             tglDaftar: finalDate,
             posisiMagangId: posisiMagangId,
             perusahaanId: idPerusahaan,
             keteranganDaftar: keteranganCOntroller.text,
-            token: token)) {
+            token: token);
+        if (data == 200) {
           print('kondisi berhasil');
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               backgroundColor: bgGreen,
@@ -108,6 +109,13 @@ class _DaftarMagangState extends State<DaftarMagang> {
               )));
           // Navigator.popAndPushNamed(context, '/home');
           Navigator.pop(context);
+        } else if (data == 400) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: processColor,
+              content: Text(
+                "Sudah terdaftar",
+                style: primaryTextStyle.copyWith(color: Colors.white),
+              )));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               backgroundColor: alertColor,

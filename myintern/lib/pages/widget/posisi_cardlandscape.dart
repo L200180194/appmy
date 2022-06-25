@@ -80,7 +80,7 @@ class PosisiCardLandscape extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(top: 12),
+                            margin: EdgeInsets.only(top: 0),
                             child: SizedBox(
                               width: 210,
                               child: Text(
@@ -137,6 +137,8 @@ class PosisiCardLandscape extends StatelessWidget {
                             alignment: Alignment.centerRight,
                             child: Text(
                               '${posisi.deadline_posisi}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: primaryTextStyle.copyWith(fontSize: 12),
                             )))
                   ],

@@ -10,6 +10,9 @@ import 'package:myintern/providers/informasi_providers.dart';
 import 'package:myintern/providers/pendaftaran_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../theme.dart';
 
 class InformationPage extends StatefulWidget {
   const InformationPage({Key? key}) : super(key: key);
@@ -47,6 +50,39 @@ class _InformationPageState extends State<InformationPage> {
     // print(pp);
     // AuthProvider ap = Provider.of<AuthProvider>(context);
     // UserModel usr = ap.user;
+    if (pp.posisis.isEmpty) {
+      print('kosong');
+    } else {
+      print('tidak kosong');
+    }
+    Widget informasi() {
+      return Container(
+          height: 105.h,
+          margin: EdgeInsets.symmetric(
+            horizontal: defaultMargin,
+          ),
+          padding: EdgeInsets.symmetric(
+              horizontal: defaultMargin, vertical: defaultMargin),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  offset: Offset(3.0, 3.0), //(x,y)
+                  blurRadius: 7.0,
+                ),
+              ]),
+          child: Column(
+            children: [
+              // Image.asset('infopage1.png'),
+              Text(
+                'Halaman informasi merupakan halaman berisi daftar posisi yang sudah didaftari oleh peserta. Pegumuman pendaftaran juga dapat dilihat di halaman informasi ini',
+                style: primaryTextStyle.copyWith(fontSize: 14.sp),
+              ),
+            ],
+          ));
+    }
 
     return (isLoading == true)
         ? Container(
@@ -55,13 +91,14 @@ class _InformationPageState extends State<InformationPage> {
               size: 50.0,
             ),
           )
-        : (MediaQuery.of(context).orientation == Orientation.portrait)
-            ? ListView(
-                children:
-                    // [Text('')])
-                    pp.posisis.map((e) => InformasiCard(e)).toList())
-            : ListView(
-                children:
-                    pp.posisis.map((e) => InformasiCardLandscape(e)).toList());
+        : (pp.posisis.isEmpty)
+            ? informasi()
+            : (MediaQuery.of(context).orientation == Orientation.portrait)
+                ? ListView(
+                    children: pp.posisis.map((e) => InformasiCard(e)).toList())
+                : ListView(
+                    children: pp.posisis
+                        .map((e) => InformasiCardLandscape(e))
+                        .toList());
   }
 }

@@ -63,9 +63,9 @@ class _SignInPageState extends State<SignInPage> {
     Widget banner() {
       return Container(
         // color: Colors.amber,
-        height: screenHeight / 5,
-        margin: EdgeInsets.symmetric(
-            horizontal: defaultMargin, vertical: defaultMargin),
+        height: screenHeight / 4,
+        margin:
+            EdgeInsets.fromLTRB(defaultMargin, defaultMargin, defaultMargin, 0),
         child: Center(
             child: Column(
           children: [
@@ -92,6 +92,7 @@ class _SignInPageState extends State<SignInPage> {
     Widget emailInput(double email, double input, double containerh,
         double contentpadh, double contentpadw) {
       return Container(
+        // color: Colors.amber,
         margin: EdgeInsets.symmetric(horizontal: defaultMargin),
         // color: primaryColor,
         child: Column(
@@ -235,20 +236,24 @@ class _SignInPageState extends State<SignInPage> {
         child: Row(
           children: [
             Text(
-              "Belum memiliki akun ?",
+              "Belum memiliki akun ? ",
               style:
                   primaryTextStyle.copyWith(fontSize: txt, fontWeight: regular),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/signup');
-              },
-              child: Text(
-                ' Registrasi',
-                style: primaryTextStyle.copyWith(
-                    color: Colors.grey, fontSize: btntxt),
+            Flexible(
+              flex: 1,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/signup');
+                },
+                child: Text(
+                  ' Registrasi',
+                  textAlign: TextAlign.start,
+                  style: primaryTextStyle.copyWith(
+                      color: Colors.grey, fontSize: btntxt),
+                ),
               ),
-            )
+            ),
           ],
         ),
       );

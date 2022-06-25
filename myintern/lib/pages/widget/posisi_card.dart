@@ -75,13 +75,14 @@ class PosisiCard extends StatelessWidget {
                             child: Text(
                               '${posisi.nama_posisi}',
                               overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                               softWrap: false,
                               style: primaryTextStyle.copyWith(
                                   fontSize: 14.sp, fontWeight: bold),
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(top: 12.h),
+                            margin: EdgeInsets.only(top: 5.h),
                             child: SizedBox(
                               width: 210.w,
                               child: Text(
@@ -139,6 +140,8 @@ class PosisiCard extends StatelessWidget {
                             alignment: Alignment.centerRight,
                             child: Text(
                               '${posisi.deadline_posisi}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: primaryTextStyle.copyWith(fontSize: 12.sp),
                             )))
                   ],
