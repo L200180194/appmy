@@ -56,32 +56,40 @@ class _InformationPageState extends State<InformationPage> {
       print('tidak kosong');
     }
     Widget informasi() {
-      return Container(
-          height: 105.h,
-          margin: EdgeInsets.symmetric(
-            horizontal: defaultMargin,
-          ),
-          padding: EdgeInsets.symmetric(
-              horizontal: defaultMargin, vertical: defaultMargin),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  offset: Offset(3.0, 3.0), //(x,y)
-                  blurRadius: 7.0,
-                ),
-              ]),
-          child: Column(
-            children: [
-              // Image.asset('infopage1.png'),
-              Text(
-                'Halaman informasi merupakan halaman berisi daftar posisi yang sudah didaftari oleh peserta. Pegumuman pendaftaran juga dapat dilihat di halaman informasi ini',
-                style: primaryTextStyle.copyWith(fontSize: 14.sp),
-              ),
-            ],
-          ));
+      return ListView(
+        children: [
+          Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: defaultMargin, vertical: defaultMargin),
+              padding: EdgeInsets.symmetric(
+                  horizontal: defaultMargin, vertical: defaultMargin),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      offset: Offset(3.0, 3.0), //(x,y)
+                      blurRadius: 7.0,
+                    ),
+                  ]),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/information.png',
+                    // width: 250.w,
+                    // height: 250.h,
+                  ),
+                  Text(
+                    'Anda belum mendaftar di posisi magang manapun.',
+                    textAlign: TextAlign.center,
+                    style: primaryTextStyle.copyWith(fontSize: 20.sp),
+                  ),
+                ],
+              )),
+        ],
+      );
     }
 
     return (isLoading == true)

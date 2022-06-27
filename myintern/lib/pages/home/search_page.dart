@@ -230,6 +230,29 @@ class _SearchPageState extends State<SearchPage> {
           ));
     }
 
+    Widget informasi() {
+      return Container(
+          margin: EdgeInsets.symmetric(
+              horizontal: defaultMargin, vertical: defaultMargin),
+          padding: EdgeInsets.symmetric(
+              horizontal: defaultMargin, vertical: defaultMargin),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/search.png',
+                // width: 250.w,
+                // height: 250.h,
+              ),
+              Text(
+                'Cari posisi magang.',
+                textAlign: TextAlign.center,
+                style: primaryTextStyle.copyWith(fontSize: 20.sp),
+              ),
+            ],
+          ));
+    }
+
     return Scaffold(
       body: ColorfulSafeArea(
           color: primaryColor,
@@ -246,6 +269,7 @@ class _SearchPageState extends State<SearchPage> {
                         banner(),
                         emailInput(18.sp, 14.sp, 38.h, 15.h, 10.w),
                         butonCari(38, 21, 18),
+                        informasi()
                       ],
                     )
                   : ListView(
@@ -253,6 +277,7 @@ class _SearchPageState extends State<SearchPage> {
                         banner(),
                         emailInput(18, 14, 38.h, 15.h, 10.w),
                         butonCari(38, 21, 18),
+                        informasi()
                       ],
                     )),
     );

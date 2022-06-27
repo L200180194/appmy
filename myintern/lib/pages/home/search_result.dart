@@ -85,6 +85,33 @@ class _SearchResultPageState extends State<SearchResultPage> {
           );
     }
 
+    Widget informasi() {
+      return ListView(
+        children: [
+          Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: defaultMargin, vertical: defaultMargin),
+              padding: EdgeInsets.symmetric(
+                  horizontal: defaultMargin, vertical: defaultMargin),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/search_not_found.png',
+                    // width: 250.w,
+                    // height: 250.h,
+                  ),
+                  Text(
+                    'Hasil pencarian dari $src tidak ditemukan',
+                    textAlign: TextAlign.center,
+                    style: primaryTextStyle.copyWith(fontSize: 20.sp),
+                  ),
+                ],
+              )),
+        ],
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight:
@@ -125,12 +152,17 @@ class _SearchResultPageState extends State<SearchResultPage> {
                   ),
                 )
               : (MediaQuery.of(context).orientation == Orientation.portrait)
-                  ? ListView(
-                      children: pp.search.map((e) => PosisiCard(e)).toList())
-                  : ListView(
-                      children: pp.search
-                          .map((e) => PosisiCardLandscape(e))
-                          .toList())),
+                  ? (pp.search.isEmpty)
+                      ? informasi()
+                      : ListView(
+                          children:
+                              pp.search.map((e) => PosisiCard(e)).toList())
+                  : (pp.search.isEmpty)
+                      ? informasi()
+                      : ListView(
+                          children: pp.search
+                              .map((e) => PosisiCardLandscape(e))
+                              .toList())),
     );
   }
 }
